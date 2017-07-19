@@ -112,7 +112,7 @@ def getSong(songId):
 def getHomePage():
     playlists_json = []
     respone = requests.get(
-        'https://www.saavn.com/api.php?__call=playlist.getFeaturedPlaylists&_marker=false&language=tamil&offset=1&size=100&_format=json',
+        'https://www.saavn.com/api.php?__call=playlist.getFeaturedPlaylists&_marker=false&language=tamil&offset=1&size=10&_format=json',
         verify=False)
     if respone.status_code == 200:
         playlists_json = json.loads(respone.text.splitlines()[3])
@@ -152,8 +152,8 @@ if __name__ == '__main__':
     # print(json.dumps(getAlbum('2615094'), indent=2))
     '''
     queryresults = searchSongs('nannare')
-    # print(json.dumps(searchSongs('nannare'), indent=2))
     print(json.dumps(getSong(queryresults['topQuery_json'][0]['id']), indent=2))
     '''
-    id= raw_input()
-    downloadSongs(getPlayList(id))
+    for playlist in getHomePage():
+        id = playlist['listid']
+        downloadSongs(getPlayList(id))
