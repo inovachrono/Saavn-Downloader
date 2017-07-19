@@ -1,0 +1,6 @@
+BeautifulSoup4
+eyed3
+urllib3
+request
+pathlib
+requests
