@@ -127,42 +127,12 @@ def downloadSongs(songs_json):
             dec_url = des_cipher.decrypt(enc_url, padmode=PAD_PKCS5).decode('utf-8')
             dec_url = dec_url.replace('_96.mp4', '_320.mp4')
             filename = html.unescape(obj['song']) + '.m4a'
-            '''
-            http = urllib3.PoolManager()
-            response = http.request('GET', dec_url)
-            with open(filename, 'wb') as f:
-                f.write(response.data)
-            response.release_conn()
-            proxies, headers = setProxy()
-            try:
-                res = requests.get(dec_url, proxies=proxies, headers=headers)
-            except Exception as e:
-                print('Error accesssing website error: ' + e)
-                sys.exit()
-            '''
-        except Exception:
-            pass
+        except Exception as e:
+               logger.error('Download Error'+ str(e))
         try:
             print("Downloading %s" % filename)
             obj = SmartDL(dec_url, os.path.join(os.getcwd(),filename))
             obj.start()
-            # with open(filename, "wb") as f:
-            #     print("Downloading %s" % filename)
-            #     response = requests.get(dec_url, stream=True)
-            #     total_length = response.headers.get('content-length')
-
-            #     if total_length is None: # no content length header
-            #         f.write(response.content)
-            #     else:
-            #         dl = 0
-            #         total_length = int(total_length)
-            #         for data in response.iter_content(chunk_size=4096):
-            #             dl += len(data)
-            #             f.write(data)
-            #             done = int(50 * dl / total_length)
-            #             sys.stdout.write("\r[%s%s]" % ('=' * done, ' ' * (50-done)) )
-            #             sys.stdout.flush()
-            # addtags(filename, obj, songs_json['listname'])
             print('\n')
         except Exception as e:
                logger.error('Download Error'+ str(e))
@@ -172,15 +142,15 @@ if __name__ == '__main__':
     # playlists = getHomePage()
     # print(json.dumps(playlists, indent=2), len(getHomePage()))
     # print(json.dumps(getPlayList(playlists[0]["listid"]), indent=2)
-    #print(json.dumps(getAlbum('2615094'), indent=2))
+    print(json.dumps(getAlbum("Qh3xJvaftt0_"), indent=2))
     '''
     queryresults = searchSongs('nannare')
     print(json.dumps(getSong(queryresults['topQuery_json'][0]['id']), indent=2))
     '''
     #id = raw_input()
     #downloadSongs(getPlayList(id))
-    for playlist in getHomePage():
-        print(playlist)
-        id = raw_input()
-        if id is "1":
-          downloadSongs(getPlayList(playlist['listid']))
+    # for playlist in getHomePage():
+    #     print(playlist)
+    #     id = raw_input()
+    #     if id is "1":
+    #       downloadSongs(getPlayList(playlist['listid']))
