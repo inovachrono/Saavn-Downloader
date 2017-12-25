@@ -8,7 +8,9 @@ import urllib3.request
 import requests
 from requests.packages.urllib3.exceptions import InsecureRequestWarning
 import os
-
+import html
+from pySmartDL import SmartDL
+import logger
 # Pre Configurations
 urllib3.disable_warnings()
 requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
@@ -16,7 +18,7 @@ unicode = str
 raw_input = input
 
 
-def addtags(filename, json_data):
+def addtags(filename, json_data, playlist_name):
     audio = MP4(filename)
     audio['\xa9nam'] = unicode(json_data['song'])
     audio['\xa9ART'] = unicode(json_data['primary_artists'])
@@ -24,7 +26,7 @@ def addtags(filename, json_data):
     audio['aART'] = unicode(json_data['singers'])
     audio['\xa9wrt'] = unicode(json_data['music'])
     audio['desc'] = unicode(json_data['starring'])
-    audio['\xa9gen'] = unicode(json_data['label'])
+    audio['\xa9gen'] = unicode(playlist_name)
     # audio['cprt'] = track['copyright'].encode('utf-8')
     # audio['disk'] = [(1, 1)]
     # audio['trkn'] = [(int(track['track']), int(track['maxtracks']))]
@@ -82,8 +84,7 @@ def getPlayList(listId):
     respone = requests.get(
         'https://www.saavn.com/api.php?listid={0}&_format=json&__call=playlist.getDetails'.format(listId), verify=False)
     if respone.status_code == 200:
-        songs_json = json.loads(respone.text.splitlines()[5])
-        songs_json = songs_json['songs']
+        songs_json = json.loads(respone.text.splitlines()[4])
     return songs_json
 
 
@@ -93,8 +94,7 @@ def getAlbum(albumId):
         'https://www.saavn.com/api.php?_format=json&__call=content.getAlbumDetails&albumid={0}'.format(albumId),
         verify=False)
     if respone.status_code == 200:
-        songs_json = json.loads(respone.text.splitlines()[6])
-        songs_json = songs_json['songs']
+        songs_json = json.loads(respone.text.splitlines()[5])
     return songs_json
 
 
@@ -105,55 +105,82 @@ def getSong(songId):
     if respone.status_code == 200:
         print(respone.text)
         songs_json = json.loads(respone.text.splitlines()[5])
-        songs_json = songs_json['songs']
     return songs_json
 
 
 def getHomePage():
     playlists_json = []
     respone = requests.get(
-        'https://www.saavn.com/api.php?__call=playlist.getFeaturedPlaylists&_marker=false&language=tamil&offset=1&size=10&_format=json',
+        'https://www.saavn.com/api.php?__call=playlist.getFeaturedPlaylists&_marker=false&language=tamil&offset=1&size=250&_format=json',
         verify=False)
     if respone.status_code == 200:
-        playlists_json = json.loads(respone.text.splitlines()[3])
+        playlists_json = json.loads(respone.text.splitlines()[2])
         playlists_json = playlists_json['featuredPlaylists']
     return playlists_json
 
 
 def downloadSongs(songs_json):
     des_cipher = setDecipher()
-    for obj in songs_json:
-        enc_url = base64.b64decode(obj['encrypted_media_url'].strip())
-        dec_url = des_cipher.decrypt(enc_url, padmode=PAD_PKCS5).decode('utf-8')
-        dec_url = dec_url.replace('_96.mp4', '_320.mp4')
-        print(dec_url)
-        filename = obj['song'] + '.m4a'
-        http = urllib3.PoolManager()
-        response = http.request('GET', dec_url)
-        with open(filename, 'wb') as f:
-            f.write(response.data)
-        response.release_conn()
-        '''
-        proxies, headers = setProxy()
+    for obj in songs_json['songs']:
         try:
-            res = requests.get(dec_url, proxies=proxies, headers=headers)
+            enc_url = base64.b64decode(obj['encrypted_media_url'].strip())
+            dec_url = des_cipher.decrypt(enc_url, padmode=PAD_PKCS5).decode('utf-8')
+            dec_url = dec_url.replace('_96.mp4', '_320.mp4')
+            filename = html.unescape(obj['song']) + '.m4a'
+            '''
+            http = urllib3.PoolManager()
+            response = http.request('GET', dec_url)
+            with open(filename, 'wb') as f:
+                f.write(response.data)
+            response.release_conn()
+            proxies, headers = setProxy()
+            try:
+                res = requests.get(dec_url, proxies=proxies, headers=headers)
+            except Exception as e:
+                print('Error accesssing website error: ' + e)
+                sys.exit()
+            '''
+        except Exception:
+            pass
+        try:
+            print("Downloading %s" % filename)
+            obj = SmartDL(dec_url, os.path.join(os.getcwd(),filename))
+            obj.start()
+            # with open(filename, "wb") as f:
+            #     print("Downloading %s" % filename)
+            #     response = requests.get(dec_url, stream=True)
+            #     total_length = response.headers.get('content-length')
+
+            #     if total_length is None: # no content length header
+            #         f.write(response.content)
+            #     else:
+            #         dl = 0
+            #         total_length = int(total_length)
+            #         for data in response.iter_content(chunk_size=4096):
+            #             dl += len(data)
+            #             f.write(data)
+            #             done = int(50 * dl / total_length)
+            #             sys.stdout.write("\r[%s%s]" % ('=' * done, ' ' * (50-done)) )
+            #             sys.stdout.flush()
+            # addtags(filename, obj, songs_json['listname'])
+            print('\n')
         except Exception as e:
-            print('Error accesssing website error: ' + e)
-            sys.exit()
-        '''
-        addtags(filename, obj)
-        print(filename, '\n')
+               logger.error('Download Error'+ str(e))
 
 
 if __name__ == '__main__':
     # playlists = getHomePage()
     # print(json.dumps(playlists, indent=2), len(getHomePage()))
     # print(json.dumps(getPlayList(playlists[0]["listid"]), indent=2)
-    # print(json.dumps(getAlbum('2615094'), indent=2))
+    #print(json.dumps(getAlbum('2615094'), indent=2))
     '''
     queryresults = searchSongs('nannare')
     print(json.dumps(getSong(queryresults['topQuery_json'][0]['id']), indent=2))
     '''
+    #id = raw_input()
+    #downloadSongs(getPlayList(id))
     for playlist in getHomePage():
-        id = playlist['listid']
-        downloadSongs(getPlayList(id))
+        print(playlist)
+        id = raw_input()
+        if id is "1":
+          downloadSongs(getPlayList(playlist['listid']))
