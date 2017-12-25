@@ -157,7 +157,7 @@ if __name__ == '__main__':
         getPlayListID = soup.select(".flip-layout")[0]["data-listid"]
         if getPlayListID is not None:
             print("Initiating PlayList Downloading")
-            downloadSongs(getAlbum(getPlayListID))
+            downloadSongs(getPlayList(getPlayListID))
             sys.exit()
     except Exception as e:
            print('...')
