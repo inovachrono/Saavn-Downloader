@@ -1,16 +1,21 @@
+import ast
 import base64
-from mutagen.mp4 import MP4, MP4Cover
-import json
-from pyDes import *
-import urllib3
-import urllib.request
-import urllib3.request
-import requests
-from requests.packages.urllib3.exceptions import InsecureRequestWarning
-import os
 import html
-from pySmartDL import SmartDL
+import json
+import os
+import re
+import urllib.request
+
 import logger
+import requests
+import urllib3.request
+from bs4 import BeautifulSoup
+from mutagen.mp4 import MP4, MP4Cover
+from pySmartDL import SmartDL
+from requests.packages.urllib3.exceptions import InsecureRequestWarning
+
+from pyDes import *
+
 # Pre Configurations
 urllib3.disable_warnings()
 requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
@@ -128,29 +133,55 @@ def downloadSongs(songs_json):
             dec_url = dec_url.replace('_96.mp4', '_320.mp4')
             filename = html.unescape(obj['song']) + '.m4a'
         except Exception as e:
-               logger.error('Download Error'+ str(e))
+            logger.error('Download Error' + str(e))
         try:
             print("Downloading %s" % filename)
-            obj = SmartDL(dec_url, os.path.join(os.getcwd(),filename))
+            obj = SmartDL(dec_url, os.path.join(os.path.sep, os.getcwd(), "songs", filename))
             obj.start()
             print('\n')
         except Exception as e:
-               logger.error('Download Error'+ str(e))
+            logger.error('Download Error' + str(e))
 
 
 if __name__ == '__main__':
-    # playlists = getHomePage()
-    # print(json.dumps(playlists, indent=2), len(getHomePage()))
-    # print(json.dumps(getPlayList(playlists[0]["listid"]), indent=2)
-    print(json.dumps(getAlbum("Qh3xJvaftt0_"), indent=2))
-    '''
-    queryresults = searchSongs('nannare')
-    print(json.dumps(getSong(queryresults['topQuery_json'][0]['id']), indent=2))
-    '''
-    #id = raw_input()
-    #downloadSongs(getPlayList(id))
-    # for playlist in getHomePage():
-    #     print(playlist)
-    #     id = raw_input()
-    #     if id is "1":
-    #       downloadSongs(getPlayList(playlist['listid']))
+    input_url = input('Enter the url:').strip()
+    try:
+        proxies, headers = setProxy()
+        res = requests.get(input_url, proxies=proxies, headers=headers)
+    except Exception as e:
+        logger.error('Error accessing website error: ' + e)
+
+    soup = BeautifulSoup(res.text, "lxml")
+
+    try:
+        getPlayListID = soup.select(".flip-layout")[0]["data-listid"]
+        if getPlayListID is not None:
+            print("Initiating PlayList Downloading")
+            downloadSongs(getAlbum(getPlayListID))
+            sys.exit()
+    except Exception as e:
+           print('...')
+    try:
+        getAlbumID = soup.select(".play")[0]["onclick"]
+        getAlbumID = ast.literal_eval(re.search("\[(.*?)\]", getAlbumID)[0])[1]
+        if getAlbumID is not None:
+            print("Initiating Album Downloading")
+            downloadSongs(getAlbum(getAlbumID))
+            sys.exit()
+    except Exception as e:
+        print('...')
+
+    print("Please paste link of album or playlist")
+
+# getSongID = soup.select(".current-song")[0]["data-songid"]
+# if getSongID is not None:
+#    print(getPlayListID)
+#    sys.exit()
+
+# for playlist in getHomePage():
+#     print(playlist)
+#     id = raw_input()
+#     if id is "1":
+#       downloadSongs(getPlayList(playlist['listid']))
+# queryresults = searchSongs('nannare')
+# print(json.dumps(getSong(queryresults['topQuery_json'][0]['id']), indent=2))
