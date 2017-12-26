@@ -126,12 +126,12 @@ def getHomePage():
 
 def downloadSongs(songs_json):
     des_cipher = setDecipher()
-    for obj in songs_json['songs']:
+    for song in songs_json['songs']:
         try:
-            enc_url = base64.b64decode(obj['encrypted_media_url'].strip())
+            enc_url = base64.b64decode(song['encrypted_media_url'].strip())
             dec_url = des_cipher.decrypt(enc_url, padmode=PAD_PKCS5).decode('utf-8')
             dec_url = dec_url.replace('_96.mp4', '_320.mp4')
-            filename = html.unescape(obj['song']) + '.m4a'
+            filename = html.unescape(song['song']) + '.m4a'
         except Exception as e:
             logger.error('Download Error' + str(e))
         try:
@@ -140,7 +140,7 @@ def downloadSongs(songs_json):
             obj = SmartDL(dec_url, location)
             obj.start()
             name = songs_json['name'] if ('name' in songs_json) else songs_json['listname']
-            addtags(location, obj, name)
+            addtags(location, song, name)
             print('\n')
         except Exception as e:
             logger.error('Download Error' + str(e))
