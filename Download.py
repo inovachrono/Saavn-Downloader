@@ -136,8 +136,11 @@ def downloadSongs(songs_json):
             logger.error('Download Error' + str(e))
         try:
             print("Downloading %s" % filename)
-            obj = SmartDL(dec_url, os.path.join(os.path.sep, os.getcwd(), "songs", filename))
+            location = os.path.join(os.path.sep, os.getcwd(), "songs", filename)
+            obj = SmartDL(dec_url, location)
             obj.start()
+            name = songs_json['name'] if ('name' in songs_json) else songs_json['listname']
+            addtags(location, obj, name)
             print('\n')
         except Exception as e:
             logger.error('Download Error' + str(e))
@@ -160,10 +163,9 @@ if __name__ == '__main__':
             downloadSongs(getPlayList(getPlayListID))
             sys.exit()
     except Exception as e:
-           print('...')
+        print('...')
     try:
         getAlbumID = soup.select(".play")[0]["onclick"]
-        re.search("\[(.*?)\]", getAlbumID).lastindex
         getAlbumID = ast.literal_eval(re.search("\[(.*?)\]", getAlbumID).group())[1]
         if getAlbumID is not None:
             print("Initiating Album Downloading")
