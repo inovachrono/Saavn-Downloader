@@ -163,7 +163,8 @@ if __name__ == '__main__':
            print('...')
     try:
         getAlbumID = soup.select(".play")[0]["onclick"]
-        getAlbumID = ast.literal_eval(re.search("\[(.*?)\]", getAlbumID)[0])[1]
+        re.search("\[(.*?)\]", getAlbumID).lastindex
+        getAlbumID = ast.literal_eval(re.search("\[(.*?)\]", getAlbumID).group())[1]
         if getAlbumID is not None:
             print("Initiating Album Downloading")
             downloadSongs(getAlbum(getAlbumID))
