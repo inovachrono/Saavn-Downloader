@@ -36,6 +36,7 @@ def addtags(filename, json_data, playlist_name):
     # audio['disk'] = [(1, 1)]
     # audio['trkn'] = [(int(track['track']), int(track['maxtracks']))]
     audio['\xa9day'] = unicode(json_data['year'])
+    audio['cprt'] = unicode(json_data['label'])
     # if track['explicit']:
     #    audio['rtng'] = [(str(4))]
     cover_url = json_data['image'][:-11] + '500x500.jpg'
