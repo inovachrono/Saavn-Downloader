@@ -133,6 +133,7 @@ def downloadSongs(songs_json):
             dec_url = des_cipher.decrypt(enc_url, padmode=PAD_PKCS5).decode('utf-8')
             dec_url = dec_url.replace('_96.mp4', '_320.mp4')
             filename = html.unescape(song['song']) + '.m4a'
+            filename = filename.replace("\"", "'")
         except Exception as e:
             logger.error('Download Error' + str(e))
         try:
