@@ -137,15 +137,18 @@ def downloadSongs(songs_json):
         except Exception as e:
             logger.error('Download Error' + str(e))
         try:
-            print("Downloading %s" % filename)
             location = os.path.join(os.path.sep, os.getcwd(), "songs", filename)
-            obj = SmartDL(dec_url, location)
-            obj.start()
-            name = songs_json['name'] if ('name' in songs_json) else songs_json['listname']
-            addtags(location, song, name)
-            print('\n')
+            if os.path.isfile(location):
+               print("Downloaded %s" % filename)
+            else :
+                print("Downloading %s" % filename)
+                obj = SmartDL(dec_url, location)
+                obj.start()
+                name = songs_json['name'] if ('name' in songs_json) else songs_json['listname']
+                addtags(location, song, name)
+                print('\n')
         except Exception as e:
-            logger.error('Download Error' + str(e))
+             logger.error('Download Error' + str(e))
 
 
 if __name__ == '__main__':
@@ -182,7 +185,6 @@ if __name__ == '__main__':
 # if getSongID is not None:
 #    print(getPlayListID)
 #    sys.exit()
-
 # for playlist in getHomePage():
 #     print(playlist)
 #     id = raw_input()
@@ -190,3 +192,5 @@ if __name__ == '__main__':
 #       downloadSongs(getPlayList(playlist['listid']))
 # queryresults = searchSongs('nannare')
 # print(json.dumps(getSong(queryresults['topQuery_json'][0]['id']), indent=2))
+# response = requests.head(dec_url)
+# if os.path.isfile(location) if (os.stat(location).st_size >  int(response.headers["Content-Length"])) else False:
