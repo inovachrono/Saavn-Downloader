@@ -100,7 +100,7 @@ def getAlbum(albumId):
         'https://www.saavn.com/api.php?_format=json&__call=content.getAlbumDetails&albumid={0}'.format(albumId),
         verify=False)
     if respone.status_code == 200:
-        songs_json = json.loads(respone.text.splitlines()[6])
+        songs_json = json.loads(respone.text.splitlines()[7])
     return songs_json
 
 
