@@ -10,10 +10,10 @@ PoC for vulnerability in Saavn App researched by Arun, I added extra Ingridient 
 ```sh
 $ pip3 install -r requirements.txt
 $ python3 Download.py
-$ paster the URL: https://www.saavn.com/p/featured/tamil/Mumbai_To_Chennai/Goa681asP2g_
+$ paster the URL: https://www.saavn.com/s/album/tamil/96-2018/buIOjYZDrNA_
 ```
 
-![alt text](https://github.com/prabaprakash/Saavn-Downloader/raw/master/gallery/process.png)
+![alt text](https://github.com/prabaprakash/Saavn-Downloader/raw/master/gallery/Process.png)
 
 
 ### Development
