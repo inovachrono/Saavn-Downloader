@@ -13,7 +13,7 @@ $ python3 Download.py
 $ paster the URL: https://www.saavn.com/s/album/tamil/96-2018/buIOjYZDrNA_
 ```
 
-![alt text](https://github.com/prabaprakash/Saavn-Downloader/raw/master/gallery/process.png)
+![alt text](https://github.com/prabaprakash/Saavn-Downloader/raw/master/gallery/Process.png)
 
 
 ### Development
