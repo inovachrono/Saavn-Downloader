@@ -90,7 +90,8 @@ def getPlayList(listId):
     respone = requests.get(
         'https://www.saavn.com/api.php?listid={0}&_format=json&__call=playlist.getDetails'.format(listId), verify=False)
     if respone.status_code == 200:
-        songs_json = json.loads(respone.text.splitlines()[4])
+        songs_json = list(filter(lambda x: x.startswith("{"), respone.text.splitlines()))[0]
+        songs_json = json.loads(songs_json)
     return songs_json
 
 
