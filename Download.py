@@ -48,7 +48,7 @@ def addtags(filename, json_data, playlist_name):
 
 
 def setProxy():
-    base_url = 'http://h.saavncdn.com'
+    base_url = 'http://h.jiosaavncdn.com'
     proxy_ip = ''
     if ('http_proxy' in os.environ):
         proxy_ip = os.environ['http_proxy']
@@ -72,7 +72,7 @@ def searchSongs(query):
     playLists_json = []
     topQuery_json = []
     respone = requests.get(
-        'https://www.saavn.com/api.php?_format=json&query={0}&__call=autocomplete.get'.format(query))
+        'https://www.jiosaavn.com/api.php?_format=json&query={0}&__call=autocomplete.get'.format(query))
     if respone.status_code == 200:
         respone_json = json.loads(respone.text.splitlines()[6])
         albums_json = respone_json['albums']['data']
@@ -88,7 +88,7 @@ def searchSongs(query):
 def getPlayList(listId):
     songs_json = []
     respone = requests.get(
-        'https://www.saavn.com/api.php?listid={0}&_format=json&__call=playlist.getDetails'.format(listId), verify=False)
+        'https://www.jiosaavn.com/api.php?listid={0}&_format=json&__call=playlist.getDetails'.format(listId), verify=False)
     if respone.status_code == 200:
         songs_json = list(filter(lambda x: x.startswith("{"), respone.text.splitlines()))[0]
         songs_json = json.loads(songs_json)
@@ -98,7 +98,7 @@ def getPlayList(listId):
 def getAlbum(albumId):
    songs_json = []
    respone = requests.get(
-       'https://www.saavn.com/api.php?_format=json&__call=content.getAlbumDetails&albumid={0}'.format(albumId),
+       'https://www.jiosaavn.com/api.php?_format=json&__call=content.getAlbumDetails&albumid={0}'.format(albumId),
        verify=False)
    if respone.status_code == 200:
        songs_json = list(filter(lambda x: x.startswith("{"), respone.text.splitlines()))[0]
@@ -109,7 +109,7 @@ def getAlbum(albumId):
 def getSong(songId):
     songs_json = []
     respone = requests.get(
-        'http://www.saavn.com/api.php?songid={0}&_format=json&__call=song.getDetails'.format(songId), verify=False)
+        'http://www.jiosaavn.com/api.php?songid={0}&_format=json&__call=song.getDetails'.format(songId), verify=False)
     if respone.status_code == 200:
         print(respone.text)
         songs_json = json.loads(respone.text.splitlines()[5])
@@ -119,7 +119,7 @@ def getSong(songId):
 def getHomePage():
     playlists_json = []
     respone = requests.get(
-        'https://www.saavn.com/api.php?__call=playlist.getFeaturedPlaylists&_marker=false&language=tamil&offset=1&size=250&_format=json',
+        'https://www.jiosaavn.com/api.php?__call=playlist.getFeaturedPlaylists&_marker=false&language=tamil&offset=1&size=250&_format=json',
         verify=False)
     if respone.status_code == 200:
         playlists_json = json.loads(respone.text.splitlines()[2])
