@@ -48,7 +48,6 @@ def addtags(filename, json_data, playlist_name):
 
 
 def setProxy():
-    base_url = 'http://h.jiosaavncdn.com'
     proxy_ip = ''
     if ('http_proxy' in os.environ):
         proxy_ip = os.environ['http_proxy']
