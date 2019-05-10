@@ -100,9 +100,13 @@ def getAlbum(albumId):
        'https://www.jiosaavn.com/api.php?_format=json&__call=content.getAlbumDetails&albumid={0}'.format(albumId),
        verify=False)
    if respone.status_code == 200:
+       
        songs_json = list(filter(lambda x: x.startswith("{"), respone.text.splitlines()))[0]
        songs_json = json.loads(songs_json)
-   return songs_json
+       print("Album name: ",songs_json["name"])
+       album_name=songs_json["name"]
+       
+   return songs_json, album_name
 
 
 def getSong(songId):
@@ -138,7 +142,7 @@ def downloadSongs(songs_json):
         except Exception as e:
             logger.error('Download Error' + str(e))
         try:
-            location = os.path.join(os.path.sep, os.getcwd(), "songs", filename)
+            location = os.path.join(os.path.sep, os.getcwd(), album_name, filename)
             if os.path.isfile(location):
                print("Downloaded %s" % filename)
             else :
@@ -154,6 +158,7 @@ def downloadSongs(songs_json):
 
 if __name__ == '__main__':
     input_url = input('Enter the url:').strip()
+    album_name="songs"
     try:
         proxies, headers = setProxy()
         res = requests.get(input_url, proxies=proxies, headers=headers)
@@ -175,8 +180,10 @@ if __name__ == '__main__':
         getAlbumID = ast.literal_eval(re.search("\[(.*?)\]", getAlbumID).group())[1]
         if getAlbumID is not None:
             print("Initiating Album Downloading")
-            downloadSongs(getAlbum(getAlbumID))
-            sys.exit()
+            json_data, album_nm=getAlbum(getAlbumID)
+            album_name=album_nm
+            downloadSongs(json_data)
+            
     except Exception as e:
         print('...')
 
