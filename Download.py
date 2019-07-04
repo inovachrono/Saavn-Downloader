@@ -139,6 +139,12 @@ def downloadSongs(songs_json):
             dec_url = dec_url.replace('_96.mp4', '_320.mp4')
             filename = html.unescape(song['song']) + '.m4a'
             filename = filename.replace("\"", "'")
+            filename = filename.replace(":", "-") 
+            filename = filename.replace("<", "-") 
+            filename = filename.replace(">", "-") 
+            filename = filename.replace("?", "-") 
+            filename = filename.replace("*", "-") 
+            filename = filename.replace("|", "-")
         except Exception as e:
             logger.error('Download Error' + str(e))
         try:
