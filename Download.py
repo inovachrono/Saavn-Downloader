@@ -25,18 +25,18 @@ raw_input = input
 
 def addtags(filename, json_data, playlist_name):
     audio = MP4(filename)
-    audio['\xa9nam'] = unicode(json_data['song'])
-    audio['\xa9ART'] = unicode(json_data['primary_artists'])
-    audio['\xa9alb'] = unicode(json_data['album'])
-    audio['aART'] = unicode(json_data['singers'])
-    audio['\xa9wrt'] = unicode(json_data['music'])
-    audio['desc'] = unicode(json_data['starring'])
-    audio['\xa9gen'] = unicode(playlist_name)
+    audio['\xa9nam'] = html.unescape(unicode(json_data['song']))
+    audio['\xa9ART'] = html.unescape(unicode(json_data['primary_artists']))
+    audio['\xa9alb'] = html.unescape(unicode(json_data['album']))
+    audio['aART'] = html.unescape(unicode(json_data['singers']))
+    audio['\xa9wrt'] = html.unescape(unicode(json_data['music']))
+    audio['desc'] = html.unescape(unicode(json_data['starring']))
+    audio['\xa9gen'] = html.unescape(unicode(playlist_name))
     # audio['cprt'] = track['copyright'].encode('utf-8')
     # audio['disk'] = [(1, 1)]
     # audio['trkn'] = [(int(track['track']), int(track['maxtracks']))]
-    audio['\xa9day'] = unicode(json_data['year'])
-    audio['cprt'] = unicode(json_data['label'])
+    audio['\xa9day'] = html.unescape(unicode(json_data['year']))
+    audio['cprt'] = html.unescape(unicode(json_data['label']))
     # if track['explicit']:
     #    audio['rtng'] = [(str(4))]
     cover_url = json_data['image'][:-11] + '500x500.jpg'
@@ -187,7 +187,7 @@ if __name__ == '__main__':
         if getAlbumID is not None:
             print("Initiating Album Downloading")
             json_data, album_nm=getAlbum(getAlbumID)
-            album_name=album_nm
+            album_name = album_nm.replace("&quot;", "'")
             downloadSongs(json_data)
             
     except Exception as e:
