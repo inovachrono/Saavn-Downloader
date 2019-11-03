@@ -166,7 +166,7 @@ if __name__ == '__main__':
     input_url = input('Enter the url: ').strip()
     album_name="songs"
     if input("Do you want to download to the default songs directory: (Y/N) ").upper() == "N":
-        album_name = input("Enter the name of folder to be created")
+        album_name = input("Enter the name of folder to be created: ")
     try:
         proxies, headers = setProxy()
         res = requests.get(input_url, proxies=proxies, headers=headers)
