@@ -101,7 +101,7 @@ def getAlbum(albumId):
        verify=False)
    if respone.status_code == 200:
        
-       songs_json = list(filter(lambda x: x.startswith("{"), respone.text.splitlines()))[0]
+       songs_json = list(filter(lambda x: x.strip().startswith("{"), respone.text.splitlines()))[0]
        songs_json = json.loads(songs_json)
        print("Album name: ",songs_json["name"])
        album_name=songs_json["name"]
@@ -163,8 +163,10 @@ def downloadSongs(songs_json):
 
 
 if __name__ == '__main__':
-    input_url = input('Enter the url:').strip()
+    input_url = input('Enter the url: ').strip()
     album_name="songs"
+    if input("Do you want to download to the default songs directory: (Y/N) ").upper() == "N":
+        album_name = input("Enter the name of folder to be created")
     try:
         proxies, headers = setProxy()
         res = requests.get(input_url, proxies=proxies, headers=headers)
