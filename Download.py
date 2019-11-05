@@ -119,7 +119,6 @@ def getAlbum(albumId):
        songs_json = json.loads(songs_json)
        print("Album name: ",songs_json["name"])
        album_name=songs_json["name"]
-       
    return songs_json, album_name
 
 
@@ -141,6 +140,7 @@ def getShow(showId):
     return show_json
 
 
+# This function doesn't work yet
 def addtagsShow(filename, json_data):
     audio = MP4(filename)
     audio['\xa9nam'] = html.unescape(unicode(json_data['title']))
@@ -165,8 +165,10 @@ def addtagsShow(filename, json_data):
 
 def downloadShow(show_json):
     album_name = show_json.get(0)[0]['more_info']['show_title']
+    print("Show Name: {}".format(album_name))
     for season, season_json in show_json.items():
         season_name = 'Season {}'.format(season+1)
+        print("Season: {}".format(season_name))
         des_cipher = setDecipher()
         for episode in season_json:
             try:
@@ -188,7 +190,7 @@ def downloadShow(show_json):
                 if os.path.isfile(location):
                    print("Downloaded Show: {} - Season: {} - Episode: {}".format(album_name, season_name, filename))
                 else :
-                    print("Downloading Show: {} - Season: {} - Episode: {}".format(album_name, season_name, filename))
+                    print("Downloading Episode: {}".format(filename))
                     obj = SmartDL(dec_url, location)
                     obj.start()
                     # TODO: addtags will not work for shows
@@ -312,8 +314,7 @@ if __name__ == '__main__':
                 
         except Exception as e:
             print('...')
-
-        print("Please paste link of album or playlist")
+            print("Please paste link of album or playlist")
 
 # getSongID = soup.select(".current-song")[0]["data-songid"]
 # if getSongID is not None:

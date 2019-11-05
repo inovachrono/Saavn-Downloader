@@ -49,6 +49,9 @@ $ Enter your Password: your_saavn_password
 ```
 
 
+### Known Issues
+  - No Meta Data in JioSaavn Originals and Podcasts
+
 ### Development
 
 Want to contribute? Great!
