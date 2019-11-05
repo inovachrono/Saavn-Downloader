@@ -1,6 +1,6 @@
 # Saavn Downloader
 PoC for vulnerability in Saavn App researched by Arun.
-This is Fork of the original work by [prabaprakash/Saavn-Downloader](https://github.com/prabaprakash/Saavn-Downloader) which allows users to download playlist and albums using the web urls form JioSaavn.
+This is a Fork of the original work by [prabaprakash/Saavn-Downloader](https://github.com/prabaprakash/Saavn-Downloader) which allows users to download playlist and albums using the web urls form JioSaavn.
 The fullset of funcitonality offered by this fork is:
   - High Qualtiy - M4A
   - Songs Detail
