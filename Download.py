@@ -277,11 +277,11 @@ def downloadSongs(songs_json):
 if __name__ == '__main__':
     album_name="songs"
 
-    if len(sys.argv) > 1 and sys.argv[1].lower() == "-pla":
+    if len(sys.argv) > 1 and sys.argv[1].lower() == "-p":
         downloadAllPlayList(getLibrary())
-    elif len(sys.argv) > 1 and sys.argv[1].lower() == "-alb":
+    elif len(sys.argv) > 1 and sys.argv[1].lower() == "-a":
         downloadAllAlbums(getLibrary())
-    elif len(sys.argv) > 1 and sys.argv[1].lower() == '-sho':
+    elif len(sys.argv) > 1 and sys.argv[1].lower() == '-s':
         dowloadAllShows(getLibrary())
     else:
         input_url = input('Enter the url: ').strip()
