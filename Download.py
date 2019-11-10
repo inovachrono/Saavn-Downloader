@@ -32,7 +32,7 @@ def getLibrary():
     session.post(url, data=payload)
     response = session.get("https://www.jiosaavn.com/api.php?_format=json&__call=library.getAll")
     # library_json has ['song', 'show', 'artist', 'album', 'playlist', 'user'] as keys all of which have the id's as their value
-    library_json = list(filter(lambda x: x.strip().startswith("{"), response.text.splitlines()))[0]
+    library_json = [x for x in response.text.splitlines() if x.strip().startswith('{')][0]
     library_json = json.loads(library_json)
     return library_json
 
@@ -103,8 +103,7 @@ def getPlayList(listId):
     response = requests.get(
         'https://www.jiosaavn.com/api.php?listid={0}&_format=json&__call=playlist.getDetails'.format(listId), verify=False)
     if response.status_code == 200:
-        # songs_json = list(filter(lambda x: x.strip().startswith("{"), response.text.splitlines()))[0]
-        songs_json = [x for x in response.text.splitlines() if x.strip().startswith('{')][0]   # using list comprehension
+        songs_json = [x for x in response.text.splitlines() if x.strip().startswith('{')][0]
         songs_json = json.loads(songs_json)
     return songs_json
 
@@ -115,8 +114,7 @@ def getAlbum(albumId):
        'https://www.jiosaavn.com/api.php?_format=json&__call=content.getAlbumDetails&albumid={0}'.format(albumId),
        verify=False)
    if response.status_code == 200:
-       # songs_json = list(filter(lambda x: x.strip().startswith("{"), response.text.splitlines()))[0]
-       songs_json = [x for x in response.text.splitlines() if x.strip().startswith('{')][0]   # using list comprehension
+       songs_json = [x for x in response.text.splitlines() if x.strip().startswith('{')][0]
        songs_json = json.loads(songs_json)
        print("Album name: ",songs_json["name"])
        album_name=songs_json["name"]
@@ -128,16 +126,14 @@ def getShow(showId):
     show_json = {}
     response = requests.get(
                 'https://www.jiosaavn.com/api.php?_format=json&show_id={}&__call=show.getHomePage'.format(showId))
-    # show_homepage_json = list(filter(lambda x: x.strip().startswith("{"), response.text.splitlines()))[0]
-    show_homepage_json = [x for x in response.text.splitlines() if x.strip().startswith('{')][0]   # using list comprehension
+    show_homepage_json = [x for x in response.text.splitlines() if x.strip().startswith('{')][0]
     show_homepage_json = json.loads(show_homepage_json)
     no_of_seasons = len(show_homepage_json['seasons'])
     for season in range(no_of_seasons):   # Note that season value starts from 0 for the program but from 1 for the url
         no_of_episodes = show_homepage_json['seasons'][season]['more_info']['numEpisodes']
         response = requests.get(
             'https://www.jiosaavn.com/api.php?season_number={}&show_id={}&n={}&_format=json&__call=show.getAllEpisodes&sort_order=asc'.format(season+1, showId, no_of_episodes))
-        # season_json = list(filter(lambda x: x.strip().startswith("["), response.text.splitlines()))[0]
-        season_json = [x for x in response.text.splitlines() if x.strip().startswith('[')][0]   # using list comprehension
+        season_json = [x for x in response.text.splitlines() if x.strip().startswith('[')][0]
         season_json = json.loads(season_json)  # A list containing all the episodes in the season
         show_json[season] = season_json   # To build a dictionary containg all the season in the show
     return show_json
