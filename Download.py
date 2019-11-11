@@ -121,6 +121,45 @@ def getAlbum(albumId):
    return songs_json, album_name
 
 
+def getArtistAlbumsIDs():
+    album_IDs_artist = []
+    try:
+        user_in_url = input('Enter the artist URL: ')
+        response = requests.get(user_in_url)
+        soup = BeautifulSoup(response.text, 'lxml')
+        string = soup.find(id='header').find('a')['onclick']
+        numbers = [int(s) for s in string.split('"') if s.isdigit()]
+        artistId = numbers[0]
+
+        url = 'https://www.jiosaavn.com/api.php?_marker=0&_format=json&__call=artist.getArtistPageDetails&artistId={0}'.format(artistId)
+        response = requests.get(url)
+        artist_json = [x for x in response.text.splitlines() if x.strip().startswith('{')][0]
+        artist_json = json.loads(artist_json)
+    except Exception as e:
+        print(str(e))
+        print('Please check that the entered URL links to an Artist')
+    try:
+        total_albums = artist_json['topAlbums']['total']
+        if total_albums % 10 != 0:
+            total_requests = (total_albums // 10) + 1
+        else:
+            total_requests = total_albums // 10
+        print('Total requests: {}'.format(total_requests))
+        for n_album_page in range(total_requests):
+            print('Getting Album page: {0}'.format(n_album_page))
+            url = 'https://www.saavn.com/api.php?_marker=0&_format=json&__call=artist.getArtistPageDetails&artistId={0}&n_album=10&page={1}'.format(artistId, n_album_page)
+            response = requests.get(url)
+            artist_json = [x for x in response.text.splitlines() if x.strip().startswith('{')][0]
+            artist_json = json.loads(artist_json)
+            n_albums_in_page = len(artist_json['topAlbums']['albums'])
+            for i in range(n_albums_in_page):
+                albumId = artist_json['topAlbums']['albums'][i]['albumid']
+                album_IDs_artist.append(albumId)
+    except:
+        print('No albums found for the artist')
+    return album_IDs_artist
+
+
 def getShow(showId):
     show_homepage_json = []
     show_json = {}
@@ -216,9 +255,16 @@ def downloadAllAlbums(library_json):
         print("Albums found: {}".format(len(albumIDs)))
         for albumId in albumIDs:
             try:
-                json_data, album_nm=getAlbum(albumId)
-                album_name = album_nm.replace("&quot;", "'")
-                downloadSongs(json_data)
+                downloadAlbum(albumId)
+            except:
+                print('Error getting album with ID: {}'.format(albumId))
+
+
+def downloadArtistAllAlbums(album_IDs_artist):
+    if album_IDs_artist:
+        for albumId in album_IDs_artist:
+            try:
+                downloadAlbum(albumId)
             except:
                 print('Error getting album with ID: {}'.format(albumId))
 
@@ -251,7 +297,14 @@ def getHomePage():
     return playlists_json
 
 
-def downloadSongs(songs_json):
+def downloadAlbum(albumId):
+    print("Initiating Album Downloading")
+    json_data, album_nm=getAlbum(albumId)
+    album_name = album_nm.replace("&quot;", "'")
+    downloadSongs(json_data, album_name)
+
+
+def downloadSongs(songs_json, album_name="songs"):
     des_cipher = setDecipher()
     for song in songs_json['songs']:
         try:
@@ -292,6 +345,8 @@ if __name__ == '__main__':
         downloadAllAlbums(getLibrary())
     elif len(sys.argv) > 1 and sys.argv[1].lower() == '-s':
         dowloadAllShows(getLibrary())
+    elif len(sys.argv) > 1 and sys.argv[1].lower() == '-artist':
+        downloadArtistAllAlbums(getArtistAlbumsIDs())
     else:
         input_url = input('Enter the url: ').strip()
         try:
@@ -314,10 +369,7 @@ if __name__ == '__main__':
             getAlbumID = soup.select(".play")[0]["onclick"]
             getAlbumID = ast.literal_eval(re.search("\[(.*?)\]", getAlbumID).group())[1]
             if getAlbumID is not None:
-                print("Initiating Album Downloading")
-                json_data, album_nm=getAlbum(getAlbumID)
-                album_name = album_nm.replace("&quot;", "'")
-                downloadSongs(json_data)
+                downloadAlbum(getAlbumID)
                 
         except Exception as e:
             print('...')
