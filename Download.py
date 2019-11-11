@@ -191,8 +191,8 @@ def addtagsShow(filename, json_data):
 
 
 def downloadShow(show_json):
-    album_name = show_json.get(0)[0]['more_info']['show_title']
-    print("Show Name: {}".format(album_name))
+    show_name = show_json.get(0)[0]['more_info']['show_title']
+    print("Show Name: {}".format(show_name))
     for season, season_json in show_json.items():
         season_name = 'Season {}'.format(season+1)
         print("Season: {}".format(season_name))
@@ -213,9 +213,9 @@ def downloadShow(show_json):
             except Exception as e:
                 logger.error('Download Error' + str(e))
             try:
-                location = os.path.join(os.path.sep, os.getcwd(), album_name, season_name, filename)
+                location = os.path.join(os.path.sep, os.getcwd(), show_name, season_name, filename)
                 if os.path.isfile(location):
-                   print("Downloaded Show: {} - Season: {} - Episode: {}".format(album_name, season_name, filename))
+                   print("Downloaded Show: {} - Season: {} - Episode: {}".format(show_name, season_name, filename))
                 else :
                     print("Downloading Episode: {}".format(filename))
                     obj = SmartDL(dec_url, location)
@@ -344,7 +344,10 @@ def downloadSongs(songs_json, album_name='songs', artist_name='Non-Artist'):
                 print("Downloading %s" % filename)
                 obj = SmartDL(dec_url, location)
                 obj.start()
-                name = songs_json['name'] if ('name' in songs_json) else songs_json['listname']
+                try:
+                    name = songs_json['name'] if ('name' in songs_json) else songs_json['listname']
+                except:
+                    name = ''
                 addtags(location, song, name)
                 print('\n')
         except Exception as e:
