@@ -157,6 +157,7 @@ def getArtistAlbumsIDs():
                 album_IDs_artist.append(albumId)
     except:
         print('No albums found for the artist')
+    print('Total Number of Albums found: {0}'.format(len(album_IDs_artist)))
     return album_IDs_artist
 
 

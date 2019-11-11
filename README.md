@@ -27,6 +27,17 @@ $ Paste the URL: https://www.jiosaavn.com/album/tum-hi-aana-from-marjaavaan/j9bf
 ![alt text](https://github.com/prabaprakash/Saavn-Downloader/raw/master/gallery/Process.png)
 [![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fprabaprakash%2FSaavn-Downloader.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fprabaprakash%2FSaavn-Downloader?ref=badge_shield)
 
+
+
+### NOTE: If at any point there is an Error or the Download fails you can Retry the same command
+
+#### Download All Albums of an Artist
+```
+$ python Download.py -artist
+$ Paste the URL of Artist Profile: https://www.jiosaavn.com/artist/babbal-rai-albums/pRd5ZTGrLv8_
+``` 
+
+
 #### Download All Playlist from your profile
 ```
 $ python3 Download.py -p
