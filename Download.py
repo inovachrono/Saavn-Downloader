@@ -121,25 +121,12 @@ def getAlbum(albumId):
    return songs_json, album_name
 
 
-def getArtistAlbumsIDs():
+def getArtistAlbumsIDs(artistId, artist_json):
     album_IDs_artist = []
     try:
-        user_in_url = input('Enter the artist URL: ')
-        response = requests.get(user_in_url)
-        soup = BeautifulSoup(response.text, 'lxml')
-        string = soup.find(id='header').find('a')['onclick']
-        numbers = [int(s) for s in string.split('"') if s.isdigit()]
-        artistId = numbers[0]
-
-        url = 'https://www.jiosaavn.com/api.php?_marker=0&_format=json&__call=artist.getArtistPageDetails&artistId={0}'.format(artistId)
-        response = requests.get(url)
-        artist_json = [x for x in response.text.splitlines() if x.strip().startswith('{')][0]
-        artist_json = json.loads(artist_json)
-    except Exception as e:
-        print(str(e))
-        print('Please check that the entered URL links to an Artist')
-    try:
+        artist_name = artist_json['name']
         total_albums = artist_json['topAlbums']['total']
+        print('Total Albums of the Artist: {0}'.format(total_albums))
         if total_albums % 10 != 0:
             total_requests = (total_albums // 10) + 1
         else:
@@ -155,10 +142,11 @@ def getArtistAlbumsIDs():
             for i in range(n_albums_in_page):
                 albumId = artist_json['topAlbums']['albums'][i]['albumid']
                 album_IDs_artist.append(albumId)
-    except:
+    except Exception as e:
+        print(str(e))
         print('No albums found for the artist')
     print('Total Number of Albums found: {0}'.format(len(album_IDs_artist)))
-    return album_IDs_artist
+    return (album_IDs_artist, artist_name)
 
 
 def getShow(showId):
@@ -261,13 +249,36 @@ def downloadAllAlbums(library_json):
                 print('Error getting album with ID: {}'.format(albumId))
 
 
-def downloadArtistAllAlbums(album_IDs_artist):
+def downloadArtistAllAlbums(album_IDs_artist, artist_name):
     if album_IDs_artist:
         for albumId in album_IDs_artist:
             try:
-                downloadAlbum(albumId)
+                downloadAlbum(albumId, artist_name)
             except:
                 print('Error getting album with ID: {}'.format(albumId))
+
+
+def downloadArtistAllSongs(artistId, artist_json):
+    try:
+        artist_name = artist_json['name']
+        total_songs = artist_json['topSongs']['total']
+        print('Total Songs of the Artist: {0}'.format(total_songs))
+        if total_songs % 10 != 0:
+            total_requests = (total_songs // 10) + 1
+        else:
+            total_requests = total_songs // 10
+        print('Total requests: {}'.format(total_requests))
+        for n_song_page in range(total_requests):
+            print('Getting Song page: {0}'.format(n_song_page))
+            url = 'https://www.saavn.com/api.php?_marker=0&_format=json&__call=artist.getArtistPageDetails&artistId={0}&n_song=10&page={1}'.format(artistId, n_song_page)
+            response = requests.get(url)
+            artist_json = [x for x in response.text.splitlines() if x.strip().startswith('{')][0]
+            artist_json = json.loads(artist_json)
+            songs_json = artist_json['topSongs']   # A dict with key songs having at most 10 songs
+            downloadSongs(songs_json, artist_name=artist_name)
+    except Exception as e:
+        print(str(e))
+        print('No songs found for the artist')
 
 
 def dowloadAllShows(library_json):
@@ -298,14 +309,17 @@ def getHomePage():
     return playlists_json
 
 
-def downloadAlbum(albumId):
+def downloadAlbum(albumId, artist_name=''):
     print("Initiating Album Downloading")
     json_data, album_nm=getAlbum(albumId)
     album_name = album_nm.replace("&quot;", "'")
-    downloadSongs(json_data, album_name)
+    if artist_name:
+        downloadSongs(json_data, album_name, artist_name=artist_name)
+    else:
+        downloadSongs(json_data, album_name)
 
 
-def downloadSongs(songs_json, album_name="songs"):
+def downloadSongs(songs_json, album_name='songs', artist_name='Non-Artist'):
     des_cipher = setDecipher()
     for song in songs_json['songs']:
         try:
@@ -323,7 +337,7 @@ def downloadSongs(songs_json, album_name="songs"):
         except Exception as e:
             logger.error('Download Error' + str(e))
         try:
-            location = os.path.join(os.path.sep, os.getcwd(), album_name, filename)
+            location = os.path.join(os.path.sep, os.getcwd(), artist_name, album_name, filename)
             if os.path.isfile(location):
                print("Downloaded %s" % filename)
             else :
@@ -346,8 +360,29 @@ if __name__ == '__main__':
         downloadAllAlbums(getLibrary())
     elif len(sys.argv) > 1 and sys.argv[1].lower() == '-s':
         dowloadAllShows(getLibrary())
-    elif len(sys.argv) > 1 and sys.argv[1].lower() == '-artist':
-        downloadArtistAllAlbums(getArtistAlbumsIDs())
+    elif len(sys.argv) > 2 and sys.argv[1].lower() == '-artist':
+        try:
+            user_in_url = input('Enter the artist URL: ')
+            response = requests.get(user_in_url)
+            soup = BeautifulSoup(response.text, 'lxml')
+            string = soup.find(id='header').find('a')['onclick']
+            numbers = [int(s) for s in string.split('"') if s.isdigit()]
+            artistId = numbers[0]
+
+            url = 'https://www.jiosaavn.com/api.php?_marker=0&_format=json&__call=artist.getArtistPageDetails&artistId={0}'.format(artistId)
+            response = requests.get(url)
+            artist_json = [x for x in response.text.splitlines() if x.strip().startswith('{')][0]
+            artist_json = json.loads(artist_json)
+        except Exception as e:
+            print(str(e))
+            print('Please check that the entered URL links to an Artist')
+        if sys.argv[2].lower() == '--album':
+            print('Downloading all artist albums')
+            album_IDs_artist, artist_name = getArtistAlbumsIDs(artistId, artist_json)
+            downloadArtistAllAlbums(album_IDs_artist, artist_name)
+        elif sys.argv[2].lower() == '--song':
+            print('Downloading all artist songs')
+            downloadArtistAllSongs(artistId, artist_json)
     else:
         input_url = input('Enter the url: ').strip()
         try:

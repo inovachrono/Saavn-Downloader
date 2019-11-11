@@ -33,9 +33,15 @@ $ Paste the URL: https://www.jiosaavn.com/album/tum-hi-aana-from-marjaavaan/j9bf
 
 #### Download All Albums of an Artist
 ```
-$ python Download.py -artist
+$ python Download.py -artist --album
 $ Paste the URL of Artist Profile: https://www.jiosaavn.com/artist/babbal-rai-albums/pRd5ZTGrLv8_
 ``` 
+
+#### Download All Songs of an Artist
+```
+$ python Download.py -artist --song
+$ Paste the URL of Artist Profile: https://www.jiosaavn.com/artist/babbal-rai-albums/pRd5ZTGrLv8_
+```
 
 
 #### Download All Playlist from your profile
