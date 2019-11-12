@@ -6,6 +6,8 @@ The fullset of funcitonality offered by this fork is:
   - Songs Detail
   - Download PlayList
   - Download Album
+  - Download all Albums of an Artist as Albums
+  - Download all Songs of an Artist as Songs
   - Download Entire PlayList from user profile
   - Download Entire Albums from user profile
   - Download Entire JioSaavn Originals and Podcasts in the user profile
