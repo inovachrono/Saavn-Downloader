@@ -21,7 +21,7 @@ $ pip3 install -r requirements.txt
 ### Usage
 
 ##### Download Playlist or Album from Web URL
-```
+```sh
 $ python3 Download.py
 $ Paste the URL: https://www.jiosaavn.com/album/tum-hi-aana-from-marjaavaan/j9bfphC2728_
 ```
@@ -34,34 +34,43 @@ $ Paste the URL: https://www.jiosaavn.com/album/tum-hi-aana-from-marjaavaan/j9bf
 ### NOTE: If at any point there is an Error or the Download fails you can Retry the same command
 
 #### Download All Albums of an Artist
-```
+```sh
 $ python Download.py -artist --album
 $ Paste the URL of Artist Profile: https://www.jiosaavn.com/artist/babbal-rai-albums/pRd5ZTGrLv8_
 ``` 
 
+
+#### Download All Albums of an Artist Fast*
+```sh
+$ python Download.py -artist --album --fast
+$ Paste the URL of Artist Profile: https://www.jiosaavn.com/artist/babbal-rai-albums/pRd5ZTGrLv8_
+``` 
+*Use this method only if you dont like the waiting period of 1-2 minutes while the albums are being retrieved*
+
+
 #### Download All Songs of an Artist
-```
+```sh
 $ python Download.py -artist --song
 $ Paste the URL of Artist Profile: https://www.jiosaavn.com/artist/babbal-rai-albums/pRd5ZTGrLv8_
 ```
 
 
 #### Download All Playlist from your profile
-```
+```sh
 $ python3 Download.py -p
 $ Enter your Email: your_saavn_email
 $ Enter your Password: your_saavn_password
 ```
 
 #### Download All Albums from your profile
-```
+```sh
 $ python3 Download.py -a
 $ Enter your Email: your_saavn_email
 $ Enter your Password: your_saavn_password
 ```
 
 #### Download All JioSaavn Originals or Podcast Shows from your profile
-```
+```sh
 $ python3 Download.py -s
 $ Enter your Email: your_saavn_email
 $ Enter your Password: your_saavn_password

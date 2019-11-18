@@ -17,11 +17,70 @@ from requests.packages.urllib3.exceptions import InsecureRequestWarning
 
 from pyDes import *
 
+from aiohttp import ClientSession
+import asyncio
+
 # Pre Configurations
 urllib3.disable_warnings()
 requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 unicode = str
 raw_input = input
+
+
+# Start of functions related to Asynchronously getting all album IDs of an artist 
+async def fetch(url, session):
+    async with session.get(url) as response:
+        html_text = await response.text()
+        return html_text
+
+
+async def run(artistId, total_requests):
+    url = 'https://www.saavn.com/api.php?_marker=0&_format=json&__call=artist.getArtistPageDetails&artistId={0}&n_album=10&page={1}'
+    tasks = []
+    async with ClientSession(headers=headers) as session:
+        for n_album_page in range(total_requests):
+            task = asyncio.ensure_future(fetch(url.format(artistId, n_album_page), session))
+            tasks.append(task)
+        responses = await asyncio.gather(*tasks)
+        # processArtistAlbumsID(responses)
+        return responses
+
+
+def main(artistId, total_requests):
+    loop = asyncio.get_event_loop()
+    future = asyncio.ensure_future(run(artistId, total_requests))
+    # loop.run_until_complete(future)
+    return  loop.run_until_complete(future)
+
+
+def getArtistAlbumsIDsFast(artistId, artist_json):
+    album_IDs_artist = []
+    try:
+        artist_name = artist_json['name']
+        total_albums = artist_json['topAlbums']['total']
+        print('Total Albums of the Artist: {0}'.format(total_albums))
+        if total_albums % 10 != 0:
+            total_requests = (total_albums // 10) + 1
+        else:
+            total_requests = total_albums // 10
+        print('Total requests: {}'.format(total_requests))
+        responses = main(artistId, total_requests)
+        for response in responses:
+            artist_json = [x for x in response.splitlines() if x.strip().startswith('{')][0]
+            artist_json = json.loads(artist_json)
+            n_albums_in_page = len(artist_json['topAlbums']['albums'])
+            for i in range(n_albums_in_page):
+                albumId = artist_json['topAlbums']['albums'][i]['albumid']
+                album_IDs_artist.append(albumId)
+    except Exception as e:
+        print(str(e))
+        print('No albums found for the artist')
+        print('You can try without --fast parameter')
+        exit()
+    print('Total Number of Albums found: {0}'.format(len(album_IDs_artist)))
+    return (album_IDs_artist, artist_name)
+# End of functions relating to asynchronous call
+
 
 def getLibrary():
     url = "https://www.jiosaavn.com/api.php?__call=user.login&_marker=0"
@@ -145,6 +204,7 @@ def getArtistAlbumsIDs(artistId, artist_json):
     except Exception as e:
         print(str(e))
         print('No albums found for the artist')
+        exit()
     print('Total Number of Albums found: {0}'.format(len(album_IDs_artist)))
     return (album_IDs_artist, artist_name)
 
@@ -366,11 +426,10 @@ if __name__ == '__main__':
     elif len(sys.argv) > 2 and sys.argv[1].lower() == '-artist':
         try:
             user_in_url = input('Enter the artist URL: ')
-            response = requests.get(user_in_url)
+            proxies, headers = setProxy()
+            response = requests.get(user_in_url, proxies=proxies, headers=headers)
             soup = BeautifulSoup(response.text, 'lxml')
-            string = soup.find(id='header').find('a')['onclick']
-            numbers = [int(s) for s in string.split('"') if s.isdigit()]
-            artistId = numbers[0]
+            artistId = soup.select('.actions.clr')[0].find('a')['data-id']   # Gets Artist ID from follow button
 
             url = 'https://www.jiosaavn.com/api.php?_marker=0&_format=json&__call=artist.getArtistPageDetails&artistId={0}'.format(artistId)
             response = requests.get(url)
@@ -379,10 +438,15 @@ if __name__ == '__main__':
         except Exception as e:
             print(str(e))
             print('Please check that the entered URL links to an Artist')
+            exit()
         if sys.argv[2].lower() == '--album':
             print('Downloading all artist albums')
-            album_IDs_artist, artist_name = getArtistAlbumsIDs(artistId, artist_json)
-            downloadArtistAllAlbums(album_IDs_artist, artist_name)
+            if sys.argv[3].lower() == '--fast':
+                album_IDs_artist, artist_name = getArtistAlbumsIDsFast(artistId, artist_json)
+                downloadArtistAllAlbums(album_IDs_artist, artist_name)
+            else:
+                album_IDs_artist, artist_name = getArtistAlbumsIDs(artistId, artist_json)
+                downloadArtistAllAlbums(album_IDs_artist, artist_name)
         elif sys.argv[2].lower() == '--song':
             print('Downloading all artist songs')
             downloadArtistAllSongs(artistId, artist_json)
