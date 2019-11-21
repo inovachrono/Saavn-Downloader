@@ -1,7 +1,7 @@
 # Saavn Downloader
 PoC for vulnerability in Saavn App researched by Arun.
 This is a Fork of the original work by [prabaprakash/Saavn-Downloader](https://github.com/prabaprakash/Saavn-Downloader) which allows users to download playlist and albums using the web urls form JioSaavn.
-The fullset of funcitonality offered by this fork is:
+The fullset of functionality offered by this fork is:
   - High Qualtiy - M4A
   - Songs Detail
   - Download PlayList
@@ -45,7 +45,7 @@ $ Paste the URL of Artist Profile: https://www.jiosaavn.com/artist/babbal-rai-al
 $ python Download.py -artist --album --fast
 $ Paste the URL of Artist Profile: https://www.jiosaavn.com/artist/babbal-rai-albums/pRd5ZTGrLv8_
 ``` 
-*Use this method only if you dont like the waiting period of 1-2 minutes while the albums are being retrieved*
+*\*Use this method only if you dont like the waiting period of 1-2 minutes while the albums are being retrieved*
 
 
 #### Download All Songs of an Artist

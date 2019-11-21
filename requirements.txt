@@ -8,3 +8,4 @@ mutagen
 pySmartDL
 logger
 lxml
+aiohttp
