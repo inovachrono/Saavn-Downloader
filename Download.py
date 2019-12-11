@@ -6,6 +6,7 @@ import os
 import re
 import urllib.request
 import sys
+import argparse
 
 import logger
 import requests
@@ -25,6 +26,20 @@ urllib3.disable_warnings()
 requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 unicode = str
 raw_input = input
+
+
+def argManager():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-artist", "--artist", action="store_true", help="Download for an Artist")
+    parser.add_argument("-song", "--song", action="store_true", help="Download Songs")
+    parser.add_argument("-album", "--album", action="store_true", help="Download Albums")
+    parser.add_argument("-user", "--user", action="store_true", help="Signin as JioSaavn user")
+    parser.add_argument("-p", "--p", action="store_true", help="Download Playlists by signing in")
+    parser.add_argument("-a", "--a", action="store_true", help="Download Albums by signing in")
+    parser.add_argument("-s", "--s", action="store_true", help="Download Shows by signing in")
+    parser.add_argument("-fast", "--fast", action="store_true", help="Get details asynchronously")
+    args = parser.parse_args()
+    return args
 
 
 # Start of functions related to Asynchronously getting all album IDs of an artist 
@@ -415,19 +430,21 @@ def downloadSongs(songs_json, album_name='songs', artist_name='Non-Artist'):
 
 
 if __name__ == '__main__':
+    args = argManager()
     album_name="songs"
 
-    if len(sys.argv) > 1 and sys.argv[1].lower() == "-p":
-        downloadAllPlayList(getLibrary())
-    elif len(sys.argv) > 1 and sys.argv[1].lower() == "-a":
-        downloadAllAlbums(getLibrary())
-    elif len(sys.argv) > 1 and sys.argv[1].lower() == '-s':
-        dowloadAllShows(getLibrary())
-    elif len(sys.argv) > 2 and sys.argv[1].lower() == '-artist':
+    if args.user:
+        if args.p:
+            downloadAllPlayList(getLibrary())
+        elif args.a:
+            downloadAllAlbums(getLibrary())
+        elif args.s:
+            dowloadAllShows(getLibrary())
+    elif args.artist:
         try:
             user_in_url = input('Enter the artist URL: ')
             proxies, headers = setProxy()
-            response = requests.get(user_in_url, proxies=proxies, headers=headers)
+            response = requests.get(user_in_url, headers=headers)
             soup = BeautifulSoup(response.text, 'lxml')
             artistId = soup.select('.actions.clr')[0].find('a')['data-id']   # Gets Artist ID from follow button
 
@@ -439,15 +456,15 @@ if __name__ == '__main__':
             print(str(e))
             print('Please check that the entered URL links to an Artist')
             exit()
-        if sys.argv[2].lower() == '--album':
+        if args.album:
             print('Downloading all artist albums')
-            if sys.argv[3].lower() == '--fast':
+            if args.fast:
                 album_IDs_artist, artist_name = getArtistAlbumsIDsFast(artistId, artist_json)
                 downloadArtistAllAlbums(album_IDs_artist, artist_name)
             else:
                 album_IDs_artist, artist_name = getArtistAlbumsIDs(artistId, artist_json)
                 downloadArtistAllAlbums(album_IDs_artist, artist_name)
-        elif sys.argv[2].lower() == '--song':
+        elif args.song:
             print('Downloading all artist songs')
             downloadArtistAllSongs(artistId, artist_json)
     else:

@@ -55,23 +55,26 @@ $ Paste the URL of Artist Profile: https://www.jiosaavn.com/artist/babbal-rai-al
 ```
 
 
+###Note: Before using below commands as JioSaavn user make sure you have signed into the JioSaavn Android or
+###iOS app at least once.
+
 #### Download All Playlist from your profile
 ```sh
-$ python3 Download.py -p
+$ python3 Download.py -user -p
 $ Enter your Email: your_saavn_email
 $ Enter your Password: your_saavn_password
 ```
 
 #### Download All Albums from your profile
 ```sh
-$ python3 Download.py -a
+$ python3 Download.py -user -a
 $ Enter your Email: your_saavn_email
 $ Enter your Password: your_saavn_password
 ```
 
 #### Download All JioSaavn Originals or Podcast Shows from your profile
 ```sh
-$ python3 Download.py -s
+$ python3 Download.py -user -s
 $ Enter your Email: your_saavn_email
 $ Enter your Password: your_saavn_password
 ```
@@ -79,6 +82,19 @@ $ Enter your Password: your_saavn_password
 
 ### Known Issues
   - No Meta Data in JioSaavn Originals and Podcasts
+
+
+
+### Possible updates ETA: 60 days from 21-11-2019
+  - Clone current account to new account
+  - Lyrics download
+  - pip package
+  - Using argparse as the standard CLI (Done)
+  - Download individual songs
+  - Download songs video from Youtube
+  - Download youtube playlist from JioSaavn
+  - Download spotify playlist from JioSaavn
+
 
 ### Development
 
