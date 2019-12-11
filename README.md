@@ -1,6 +1,4 @@
 # Saavn Downloader
-PoC for vulnerability in Saavn App researched by Arun.
-This is a Fork of the original work by [prabaprakash/Saavn-Downloader](https://github.com/prabaprakash/Saavn-Downloader) which allows users to download playlist and albums using the web urls form JioSaavn.
 The fullset of functionality offered by this fork is:
   - High Qualtiy - M4A
   - Songs Detail
@@ -55,8 +53,7 @@ $ Paste the URL of Artist Profile: https://www.jiosaavn.com/artist/babbal-rai-al
 ```
 
 
-###Note: Before using below commands as JioSaavn user make sure you have signed into the JioSaavn Android or
-###iOS app at least once.
+### Note: Before using below commands as JioSaavn user make sure you have signed into the JioSaavn Android or iOS app at least once.
 
 #### Download All Playlist from your profile
 ```sh
@@ -99,6 +96,15 @@ $ Enter your Password: your_saavn_password
 ### Development
 
 Want to contribute? Great!
+
+
+### Contributors
+  - Arun ( Discovering Vulnerability in Saavn App )
+  - [prabaprakash](https://github.com/prabaprakash/)
+  - [monuyadav016](https://github.com/monuyadav016)
+
+Get added to contributors list by making significant changes to code(Enhancements)
+
 
 ### Docker
 Not yet
