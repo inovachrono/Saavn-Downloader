@@ -20,6 +20,7 @@ from pyDes import *
 
 from aiohttp import ClientSession
 import asyncio
+import saavn_account
 
 # Pre Configurations
 urllib3.disable_warnings()
@@ -33,11 +34,16 @@ def argManager():
     parser.add_argument("-artist", "--artist", action="store_true", help="Download for an Artist")
     parser.add_argument("-song", "--song", action="store_true", help="Download Songs")
     parser.add_argument("-album", "--album", action="store_true", help="Download Albums")
+    parser.add_argument("-fast", "--fast", action="store_true", help="Get details asynchronously")
+
     parser.add_argument("-user", "--user", action="store_true", help="Signin as JioSaavn user")
     parser.add_argument("-p", "--p", action="store_true", help="Download Playlists by signing in")
     parser.add_argument("-a", "--a", action="store_true", help="Download Albums by signing in")
     parser.add_argument("-s", "--s", action="store_true", help="Download Shows by signing in")
-    parser.add_argument("-fast", "--fast", action="store_true", help="Get details asynchronously")
+
+    parser.add_argument("-clone", "--clone", action="store_true", help="Clone songs,albums,playlists to new account")
+    parser.add_argument("-create", "--create", action="store_true", help="To create new account for cloning")
+    parser.add_argument("-copy", "--copy", action="store_true", help="To copy to another account")
     args = parser.parse_args()
     return args
 
@@ -440,6 +446,8 @@ if __name__ == '__main__':
             downloadAllAlbums(getLibrary())
         elif args.s:
             dowloadAllShows(getLibrary())
+    elif args.clone:
+        saavn_account.getDetailsNClone(args.clone, args.create, args.copy)
     elif args.artist:
         try:
             user_in_url = input('Enter the artist URL: ')

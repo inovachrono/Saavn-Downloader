@@ -1,7 +1,7 @@
 # Saavn Downloader
-The fullset of functionality offered by this fork is:
+The fullset of functionality offered are:
   - High Qualtiy - M4A
-  - Songs Detail
+  - Songs with metadata
   - Download PlayList
   - Download Album
   - Download all Albums of an Artist as Albums
@@ -9,6 +9,8 @@ The fullset of functionality offered by this fork is:
   - Download Entire PlayList from user profile
   - Download Entire Albums from user profile
   - Download Entire JioSaavn Originals and Podcasts in the user profile
+  - Clone an account to a new account(Created via script)
+  - Clone an account to another account
  
 
 ### Installation
@@ -76,21 +78,27 @@ $ Enter your Email: your_saavn_email
 $ Enter your Password: your_saavn_password
 ```
 
+#### Clone songs, albums and playlists to a new account(account created by script itself)
+```sh
+$ python3 Download.py -clone -create
+$ Enter original account email(FROM): from_account_email
+$ Enter original account password(FROM): from_account_password
+$ Enter the email for new account(TO): new_account_email
+$ Enter the password for new account(TO): new_account_password
+```
+
+#### Clone songs, albums and playlists to another account(must alreay exist)
+```sh
+$ python3 Download.py -clone -copy
+$ Enter original account email(FROM): from_account_email
+$ Enter original account password(FROM): from_account_password
+$ Enter the email of copy account(TO): to_account_email
+$ Enter the password of copy account(TO): to_account_password
+```
+
 
 ### Known Issues
   - No Meta Data in JioSaavn Originals and Podcasts
-
-
-
-### Possible updates ETA: 60 days from 21-11-2019
-  - Clone current account to new account
-  - Lyrics download
-  - pip package
-  - Using argparse as the standard CLI (Done)
-  - Download individual songs
-  - Download songs video from Youtube
-  - Download youtube playlist from JioSaavn
-  - Download spotify playlist from JioSaavn
 
 
 ### Development
@@ -102,8 +110,6 @@ Want to contribute? Great!
   - Arun ( Discovering Vulnerability in Saavn App )
   - [prabaprakash](https://github.com/prabaprakash/)
   - [monuyadav016](https://github.com/monuyadav016)
-
-Get added to contributors list by making significant changes to code(Enhancements)
 
 
 ### Docker
