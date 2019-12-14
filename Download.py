@@ -109,8 +109,8 @@ def getLibrary():
     password = input("Enter your password for jiosaavn: ").strip()
     payload = { "username": username, "password": password }
     session = requests.Session()
-    session.post(url, data=payload)
-    response = session.get("https://www.jiosaavn.com/api.php?_format=json&__call=library.getAll")
+    session.post(url, data=payload, proxies=proxies, headers=headers)
+    response = session.get("https://www.jiosaavn.com/api.php?_format=json&__call=library.getAll", proxies=proxies, headers=headers)
     # library_json has ['song', 'show', 'artist', 'album', 'playlist', 'user'] as keys all of which have the id's as their value
     library_json = [x for x in response.text.splitlines() if x.strip().startswith('{')][0]
     library_json = json.loads(library_json)
@@ -150,7 +150,8 @@ def setProxy():
         'https': proxy_ip,
     }
     headers = {
-        'User-Agent': 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:49.0) Gecko/20100101 Firefox/49.0'
+        'User-Agent': 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:49.0) Gecko/20100101 Firefox/49.0',
+        'cache-control': 'private, max-age=0, no-cache'
     }
     return proxies, headers
 
@@ -165,7 +166,7 @@ def searchSongs(query):
     playLists_json = []
     topQuery_json = []
     response = requests.get(
-        'https://www.jiosaavn.com/api.php?_format=json&query={0}&__call=autocomplete.get'.format(query))
+        'https://www.jiosaavn.com/api.php?_format=json&query={0}&__call=autocomplete.get'.format(query), proxies=proxies, headers=headers)
     if response.status_code == 200:
         response_json = json.loads(response.text.splitlines()[6])
         albums_json = response_json['albums']['data']
@@ -181,7 +182,7 @@ def searchSongs(query):
 def getPlayList(listId):
     songs_json = []
     response = requests.get(
-        'https://www.jiosaavn.com/api.php?listid={0}&_format=json&__call=playlist.getDetails'.format(listId), verify=False)
+        'https://www.jiosaavn.com/api.php?listid={0}&_format=json&__call=playlist.getDetails'.format(listId), verify=False, proxies=proxies, headers=headers)
     if response.status_code == 200:
         songs_json = [x for x in response.text.splitlines() if x.strip().startswith('{')][0]
         songs_json = json.loads(songs_json)
@@ -192,7 +193,7 @@ def getAlbum(albumId):
    songs_json = []
    response = requests.get(
        'https://www.jiosaavn.com/api.php?_format=json&__call=content.getAlbumDetails&albumid={0}'.format(albumId),
-       verify=False)
+       verify=False, proxies=proxies, headers=headers)
    if response.status_code == 200:
        songs_json = [x for x in response.text.splitlines() if x.strip().startswith('{')][0]
        songs_json = json.loads(songs_json)
@@ -215,7 +216,7 @@ def getArtistAlbumsIDs(artistId, artist_json):
         for n_album_page in range(total_requests):
             print('Getting Album page: {0}'.format(n_album_page))
             url = 'https://www.saavn.com/api.php?_marker=0&_format=json&__call=artist.getArtistPageDetails&artistId={0}&n_album=10&page={1}'.format(artistId, n_album_page)
-            response = requests.get(url)
+            response = requests.get(url, proxies=proxies, headers=headers)
             artist_json = [x for x in response.text.splitlines() if x.strip().startswith('{')][0]
             artist_json = json.loads(artist_json)
             n_albums_in_page = len(artist_json['topAlbums']['albums'])
@@ -234,14 +235,14 @@ def getShow(showId):
     show_homepage_json = []
     show_json = {}
     response = requests.get(
-                'https://www.jiosaavn.com/api.php?_format=json&show_id={}&__call=show.getHomePage'.format(showId))
+                'https://www.jiosaavn.com/api.php?_format=json&show_id={}&__call=show.getHomePage'.format(showId), proxies=proxies, headers=headers)
     show_homepage_json = [x for x in response.text.splitlines() if x.strip().startswith('{')][0]
     show_homepage_json = json.loads(show_homepage_json)
     no_of_seasons = len(show_homepage_json['seasons'])
     for season in range(no_of_seasons):   # Note that season value starts from 0 for the program but from 1 for the url
         no_of_episodes = show_homepage_json['seasons'][season]['more_info']['numEpisodes']
         response = requests.get(
-            'https://www.jiosaavn.com/api.php?season_number={}&show_id={}&n={}&_format=json&__call=show.getAllEpisodes&sort_order=asc'.format(season+1, showId, no_of_episodes))
+            'https://www.jiosaavn.com/api.php?season_number={}&show_id={}&n={}&_format=json&__call=show.getAllEpisodes&sort_order=asc'.format(season+1, showId, no_of_episodes), proxies=proxies, headers=headers)
         season_json = [x for x in response.text.splitlines() if x.strip().startswith('[')][0]
         season_json = json.loads(season_json)  # A list containing all the episodes in the season
         show_json[season] = season_json   # To build a dictionary containg all the season in the show
@@ -352,7 +353,7 @@ def downloadArtistAllSongs(artistId, artist_json):
         for n_song_page in range(total_requests):
             print('Getting Song page: {0}'.format(n_song_page))
             url = 'https://www.saavn.com/api.php?_marker=0&_format=json&__call=artist.getArtistPageDetails&artistId={0}&n_song=10&page={1}'.format(artistId, n_song_page)
-            response = requests.get(url)
+            response = requests.get(url, proxies=proxies)
             artist_json = [x for x in response.text.splitlines() if x.strip().startswith('{')][0]
             artist_json = json.loads(artist_json)
             songs_json = artist_json['topSongs']   # A dict with key songs having at most 10 songs
@@ -372,7 +373,7 @@ def dowloadAllShows(library_json):
 def getSong(songId):
     songs_json = []
     response = requests.get(
-        'http://www.jiosaavn.com/api.php?songid={0}&_format=json&__call=song.getDetails'.format(songId), verify=False)
+        'http://www.jiosaavn.com/api.php?songid={0}&_format=json&__call=song.getDetails'.format(songId), verify=False, proxies=proxies, headers=headers)
     if response.status_code == 200:
         print(response.text)
         songs_json = json.loads(response.text.splitlines()[5])
@@ -383,7 +384,7 @@ def getHomePage():
     playlists_json = []
     response = requests.get(
         'https://www.jiosaavn.com/api.php?__call=playlist.getFeaturedPlaylists&_marker=false&language=tamil&offset=1&size=250&_format=json',
-        verify=False)
+        verify=False, proxies=proxies, headers=headers)
     if response.status_code == 200:
         playlists_json = json.loads(response.text.splitlines()[2])
         playlists_json = playlists_json['featuredPlaylists']
@@ -438,6 +439,7 @@ def downloadSongs(songs_json, album_name='songs', artist_name='Non-Artist'):
 if __name__ == '__main__':
     args = argManager()
     album_name="songs"
+    proxies, headers = setProxy()
 
     if args.user:
         if args.p:
@@ -451,13 +453,12 @@ if __name__ == '__main__':
     elif args.artist:
         try:
             user_in_url = input('Enter the artist URL: ')
-            proxies, headers = setProxy()
-            response = requests.get(user_in_url, headers=headers)
+            response = requests.get(user_in_url, proxies=proxies, headers=headers)
             soup = BeautifulSoup(response.text, 'lxml')
             artistId = soup.select('.actions.clr')[0].find('a')['data-id']   # Gets Artist ID from follow button
 
             url = 'https://www.jiosaavn.com/api.php?_marker=0&_format=json&__call=artist.getArtistPageDetails&artistId={0}'.format(artistId)
-            response = requests.get(url)
+            response = requests.get(url, proxies=proxies, headers=headers)
             artist_json = [x for x in response.text.splitlines() if x.strip().startswith('{')][0]
             artist_json = json.loads(artist_json)
         except Exception as e:
@@ -502,17 +503,4 @@ if __name__ == '__main__':
         except Exception as e:
             print('...')
             print("Please paste link of album or playlist")
-
-# getSongID = soup.select(".current-song")[0]["data-songid"]
-# if getSongID is not None:
-#    print(getPlayListID)
-#    sys.exit()
-# for playlist in getHomePage():
-#     print(playlist)
-#     id = raw_input()
-#     if id is "1":
-#       downloadSongs(getPlayList(playlist['listid']))
-# queryresults = searchSongs('nannare')
-# print(json.dumps(getSong(queryresults['topQuery_json'][0]['id']), indent=2))
-# response = requests.head(dec_url)
-# if os.path.isfile(location) if (os.stat(location).st_size >  int(response.headers["Content-Length"])) else False:
+    print("\nDONE")

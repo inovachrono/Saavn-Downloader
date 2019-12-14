@@ -2,7 +2,7 @@ import requests
 import json
 
 headers = {
-            'User-Agent': 'Dalvik/2.1.0 (Linux; U; Android 5.1; Micromax AQ4502 Build/LMY47O)',
+            'User-Agent': 'Dalvik/2.1.0 (Linux; U; Android 9.1; Samsung S10 Build/LMY47O)',
             'Host': 'www.saavn.com',
             'Connection': 'Keep-Alive',
             'Accept-Encoding': 'gzip'
@@ -10,7 +10,7 @@ headers = {
 
 def createAccount(email, password):
     headers = {
-            'User-Agent': 'Dalvik/2.1.0 (Linux; U; Android 5.1; Micromax AQ4502 Build/LMY47O)',
+            'User-Agent': 'Dalvik/2.1.0 (Linux; U; Android 9.1; Samsung S10 Build/LMY47O)',
             'Host': 'www.saavn.com',
             'Connection': 'Keep-Alive',
             'Accept-Encoding': 'gzip',
@@ -55,12 +55,6 @@ def createAccount(email, password):
 
 def activateLibrary(email, password):
     # Function to Emualate android signin and activate library
-    # headers = {
-    #         'User-Agent': 'Dalvik/2.1.0 (Linux; U; Android 5.1; Micromax AQ4502 Build/LMY47O)',
-    #         'Host': 'www.saavn.com',
-    #         'Connection': 'Keep-Alive',
-    #         'Accept-Encoding': 'gzip'
-    #     }
 
     payload = {
             'password': password,
@@ -107,13 +101,7 @@ def activateLibrary(email, password):
         return False
 
 def getLibrarySession(email, password):
-    # Function to Emualate android signin and activate library
-    # headers = {
-    #         'User-Agent': 'Dalvik/2.1.0 (Linux; U; Android 5.1; Micromax AQ4502 Build/LMY47O)',
-    #         'Host': 'www.saavn.com',
-    #         'Connection': 'Keep-Alive',
-    #         'Accept-Encoding': 'gzip'
-    #     }
+    # Function to Emualate android signin and activate library and return library_json and session instance
 
     payload = {
             'password': password,
@@ -285,14 +273,3 @@ def getDetailsNClone(clone, create, copy):
             print('The password for clone is: {0}'.format(nPassword))
         else:
             print('Error: Failed to clone account')
-
-
-
-
-# print(createAccount('harry014@gmaal.com', 'Zalfla10'))
-# print(activateLibrary('harry010@gmaal.com', 'Zalfla10'))
-
-
-# cloneAccount('harry000@gmail.com', 'Igot100%', 'harry027@gmaal.com', 'Zalfla10', False)
-# print('\n\n')
-# print(getLibrarySession('harry027@gmaal.com', 'Zalfla10'))

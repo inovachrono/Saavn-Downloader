@@ -1,6 +1,6 @@
 # Saavn Downloader
 The fullset of functionality offered are:
-  - High Qualtiy - M4A
+  - High Qualtiy - M4A (320 Kbps bitrate)
   - Songs with metadata
   - Download PlayList
   - Download Album
@@ -35,14 +35,14 @@ $ Paste the URL: https://www.jiosaavn.com/album/tum-hi-aana-from-marjaavaan/j9bf
 
 #### Download All Albums of an Artist
 ```sh
-$ python Download.py -artist --album
+$ python Download.py -artist -album
 $ Paste the URL of Artist Profile: https://www.jiosaavn.com/artist/babbal-rai-albums/pRd5ZTGrLv8_
 ``` 
 
 
 #### Download All Albums of an Artist Fast*
 ```sh
-$ python Download.py -artist --album --fast
+$ python Download.py -artist -album -fast
 $ Paste the URL of Artist Profile: https://www.jiosaavn.com/artist/babbal-rai-albums/pRd5ZTGrLv8_
 ``` 
 *\*Use this method only if you dont like the waiting period of 1-2 minutes while the albums are being retrieved*
@@ -50,7 +50,7 @@ $ Paste the URL of Artist Profile: https://www.jiosaavn.com/artist/babbal-rai-al
 
 #### Download All Songs of an Artist
 ```sh
-$ python Download.py -artist --song
+$ python Download.py -artist -song
 $ Paste the URL of Artist Profile: https://www.jiosaavn.com/artist/babbal-rai-albums/pRd5ZTGrLv8_
 ```
 
@@ -110,10 +110,6 @@ Want to contribute? Great!
   - Arun ( Discovering Vulnerability in Saavn App )
   - [prabaprakash](https://github.com/prabaprakash/)
   - [monuyadav016](https://github.com/monuyadav016)
-
-
-### Docker
-Not yet
 
 
 ## License
