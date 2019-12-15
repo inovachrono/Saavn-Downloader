@@ -450,6 +450,8 @@ if __name__ == '__main__':
             dowloadAllShows(getLibrary())
     elif args.clone:
         saavn_account.getDetailsNClone(args.clone, args.create, args.copy)
+    elif args.create:
+        saavn_account.createUser()
     elif args.artist:
         try:
             user_in_url = input('Enter the artist URL: ')

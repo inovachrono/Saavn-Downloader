@@ -9,8 +9,9 @@ The fullset of functionality offered are:
   - Download Entire PlayList from user profile
   - Download Entire Albums from user profile
   - Download Entire JioSaavn Originals and Podcasts in the user profile
-  - Clone an account to a new account(Created via script)
+  - Clone an account to a new account (Created via script)
   - Clone an account to another account
+  - Create a new account
  
 
 ### Installation
@@ -94,6 +95,13 @@ $ Enter original account email(FROM): from_account_email
 $ Enter original account password(FROM): from_account_password
 $ Enter the email of copy account(TO): to_account_email
 $ Enter the password of copy account(TO): to_account_password
+```
+
+#### Create new account
+```sh
+$ python3 Download.py -create
+$ Enter the email: email_you_want_to_use
+$ Enter the password: password_you_want_to_use
 ```
 
 

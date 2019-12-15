@@ -273,3 +273,13 @@ def getDetailsNClone(clone, create, copy):
             print('The password for clone is: {0}'.format(nPassword))
         else:
             print('Error: Failed to clone account')
+
+def createUser():
+    email = input('Enter the email: ')
+    password = input('Enter the password: ')
+    success = createAccount(email, password)
+    if success:
+        activateLibrary(email, password)
+        print('\nSUCCESS')
+        print('Your Account email is: ', email)
+        print('Your Account password is: ',password)
