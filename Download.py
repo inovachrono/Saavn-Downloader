@@ -159,6 +159,18 @@ def setProxy():
 def setDecipher():
     return des(b"38346591", ECB, b"\0\0\0\0\0\0\0\0", pad=None, padmode=PAD_PKCS5)
 
+def formatFilename(filename):
+    filename = filename.replace("\"", "'")
+    filename = filename.replace(":", "-")
+    filename = filename.replace('"', "-")
+    filename = filename.replace('/', "-")
+    filename = filename.replace("<", "-")
+    filename = filename.replace(">", "-")
+    filename = filename.replace("?", "-")
+    filename = filename.replace("*", "-")
+    filename = filename.replace("|", "-")
+    return filename
+
 
 def searchSongs(query):
     songs_json = []
@@ -285,13 +297,7 @@ def downloadShow(show_json):
                 dec_url = des_cipher.decrypt(enc_url, padmode=PAD_PKCS5).decode('utf-8')
                 # dec_url = dec_url.replace('_96.mp4', '_320.mp4')   # Change in url gives invalid xml
                 filename = html.unescape(episode['title']) + '.m4a'
-                filename = filename.replace("\"", "'")
-                filename = filename.replace(":", "-")
-                filename = filename.replace("<", "-")
-                filename = filename.replace(">", "-")
-                filename = filename.replace("?", "-")
-                filename = filename.replace("*", "-")
-                filename = filename.replace("|", "-")
+                filename = formatFilename(filename)
             except Exception as e:
                 logger.error('Download Error' + str(e))
             try:
@@ -409,13 +415,7 @@ def downloadSongs(songs_json, album_name='songs', artist_name='Non-Artist'):
             dec_url = des_cipher.decrypt(enc_url, padmode=PAD_PKCS5).decode('utf-8')
             dec_url = dec_url.replace('_96.mp4', '_320.mp4')
             filename = html.unescape(song['song']) + '.m4a'
-            filename = filename.replace("\"", "'")
-            filename = filename.replace(":", "-") 
-            filename = filename.replace("<", "-") 
-            filename = filename.replace(">", "-") 
-            filename = filename.replace("?", "-") 
-            filename = filename.replace("*", "-") 
-            filename = filename.replace("|", "-")
+            filename = formatFilename(filename)
         except Exception as e:
             logger.error('Download Error' + str(e))
         try:
