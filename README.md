@@ -27,9 +27,6 @@ $ python3 Download.py
 $ Paste the URL: https://www.jiosaavn.com/album/tum-hi-aana-from-marjaavaan/j9bfphC2728_
 ```
 
-![alt text](https://github.com/prabaprakash/Saavn-Downloader/raw/master/gallery/Process.png)
-[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fprabaprakash%2FSaavn-Downloader.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fprabaprakash%2FSaavn-Downloader?ref=badge_shield)
-
 
 
 ### NOTE: If at any point there is an Error or the Download fails you can Retry the same command
@@ -107,6 +104,7 @@ $ Enter the password: password_you_want_to_use
 
 ### Known Issues
   - No Meta Data in JioSaavn Originals and Podcasts
+  - Clone Functionality doesn't work with Saavn-Download-Reloaded package
 
 
 ### Development
@@ -121,4 +119,3 @@ Want to contribute? Great!
 
 
 ## License
-[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fprabaprakash%2FSaavn-Downloader.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Fprabaprakash%2FSaavn-Downloader?ref=badge_large)
