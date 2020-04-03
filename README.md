@@ -21,12 +21,16 @@ $ pip3 install -r requirements.txt
 
 ### Usage
 
-##### Download Playlist or Album from Web URL
+#### Download Playlist or Album from Web URL
 ```sh
 $ python3 Download.py
 $ Paste the URL: https://www.jiosaavn.com/album/tum-hi-aana-from-marjaavaan/j9bfphC2728_
 ```
 
+#### Choose output folder path with the -o or --outFolder argument (The output path must be absolute path and not relative)
+```
+$ python3 Download.py -o /home/monu/Desktop/
+```
 
 
 ### NOTE: If at any point there is an Error or the Download fails you can Retry the same command
@@ -101,7 +105,6 @@ $ Enter the email: email_you_want_to_use
 $ Enter the password: password_you_want_to_use
 ```
 
-
 ### Known Issues
   - No Meta Data in JioSaavn Originals and Podcasts
   - Clone Functionality doesn't work with Saavn-Download-Reloaded package
@@ -119,3 +122,4 @@ Want to contribute? Great!
 
 
 ## License
+This program is licensed under [MIT License](https://raw.githubusercontent.com/monuyadav016/Saavn-downloader/master/LICENSE)

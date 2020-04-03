@@ -44,6 +44,8 @@ def argManager():
     parser.add_argument("-clone", "--clone", action="store_true", help="Clone songs,albums,playlists to new account")
     parser.add_argument("-create", "--create", action="store_true", help="To create new account for cloning")
     parser.add_argument("-copy", "--copy", action="store_true", help="To copy to another account")
+
+    parser.add_argument("-o", "--outFolder", help="Path to store the Downloaded songs folder")
     args = parser.parse_args()
     return args
 
@@ -419,7 +421,10 @@ def downloadSongs(songs_json, album_name='songs', artist_name='Non-Artist'):
         except Exception as e:
             logger.error('Download Error' + str(e))
         try:
-            location = os.path.join(os.path.sep, os.getcwd(), artist_name, album_name, filename)
+            if args.outFolder is None:
+                location = os.path.join(os.path.sep, os.getcwd(), artist_name, album_name, filename)
+            else:
+                location = os.path.join(args.outFolder, artist_name, album_name, filename)
             if os.path.isfile(location):
                print("Downloaded %s" % filename)
             else :
