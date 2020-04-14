@@ -9,15 +9,16 @@ from download_manager import Manager
 
 
 class Playlist():
-    def __init__(self, proxies, headers):
+    def __init__(self, proxies, headers, url=None):
         requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
         self.proxies = proxies
         self.headers = headers
         self.playlistID = None
         self.songs_json = []
+        self.url = url
 
     def getPlayListID(self):
-        input_url = input('Enter the Playlist url: ').strip()
+        input_url = self.url
         try:
             res = requests.get(input_url, proxies=self.proxies, headers=self.headers)
         except Exception as e:

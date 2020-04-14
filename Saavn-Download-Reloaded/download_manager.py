@@ -9,11 +9,12 @@ import os
 from pySmartDL import SmartDL
 
 from pyDes import *
-from helper import setDecipher, formatFilename
+from helper import setDecipher, formatFilename, argManager
 
 class Manager():
     def __init__(self):
         self.unicode = str
+        self.args = argManager()
     
     def downloadSongs(self, songs_json, album_name='songs', artist_name='Non-Artist'):
         des_cipher = setDecipher()
@@ -21,13 +22,16 @@ class Manager():
             try:
                 enc_url = base64.b64decode(song['encrypted_media_url'].strip())
                 dec_url = des_cipher.decrypt(enc_url, padmode=PAD_PKCS5).decode('utf-8')
-                dec_url = dec_url.replace('_96.mp4', '_320.mp4')
+                # dec_url = dec_url.replace('_96.mp4', '_320.mp4')
                 filename = html.unescape(song['song']) + '.m4a'
                 filename = formatFilename(filename)
             except Exception as e:
                 logger.error('Download Error' + str(e))
             try:
-                location = os.path.join(os.path.sep, os.getcwd(), artist_name, album_name, filename)
+                if self.args.outFolder is None:
+                    location = os.path.join(os.path.sep, os.getcwd(), artist_name, album_name, filename)
+                else:
+                    location = os.path.join(self.args.outFolder, artist_name, album_name, filename)
                 if os.path.isfile(location):
                     print("Downloaded %s" % filename)
                 else :

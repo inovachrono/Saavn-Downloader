@@ -3,7 +3,7 @@ import requests
 import logger
 import sys
 
-from helper import argManager, setProxy
+from helper import argManager, setProxy, scan_url
 from playlist import Playlist
 from album import Album
 from artist import Artist
@@ -17,30 +17,44 @@ class Download():
         args = argManager()
         album_name="songs"
         proxies, headers = setProxy()
+
+        # Manage for jio saavn users
+        if args.user:
+            if args.email and args.password:
+                email = args.email
+                password = args.password
+            else:
+                email = input('Enter your email for jiosaavn: ').strip()
+                password = input("Enter your password for jiosaavn: ").strip()
+            account = Account(proxies=proxies, headers=headers, email=email, password=password)
+            if args.p:
+                account.start_download_playlist()
+            elif args.a:
+                account.start_download_album()
+            elif args.clone:
+                account.get_details_n_clone(args.clone, args.create, args.copy)
+            elif args.create:
+                account.create_user(email, password)
         
-        # playlist = Playlist(proxies, headers)
-        # playlist.start_download()
-
-        # album = Album(proxies, headers)
-        # album.start_download()
-
-        # artist = Artist(proxies, headers, args)
-        # artist.start_download()
-
-        # email = input('Enter original account email(FROM): ')
-        # password = input('Enter original account password(FROM): ')
-        
-        # account = Account(proxies=proxies, headers=headers, email=email, password=password)
-        # print(account.getLibrarySession())
-        # print(account.activateLibrary())
-        # print(account.createAccount())
-        # print(account.cloneAccount(nEmail='harry062@gmail.com', nPassword='Igot100%', createNewAcc=True))
-        # print(account.cloneAccount(nEmail='harry049@gmail.com', nPassword='Igot100%', createNewAcc=False))
-        # account.start_download_playlist()
-        # account.start_download_album()
-        # account.create_user()
-        # account.get_details_n_clone(args.clone, args.create, args.copy)
-        print()
+        # Manage for all default downloads
+        # Note: Passing the url parameter to the contructor of Playlist, Album and Artist is must
+        else:
+            if args.url is None:
+                dl_url = input("Enter the URL : ").strip()
+            else:
+                dl_url = args.url
+            
+            dl_type = scan_url(url=dl_url)
+            if dl_type == 'playlist':      
+                playlist = Playlist(proxies, headers, dl_url)
+                playlist.start_download()
+            elif dl_type == 'album':
+                album = Album(proxies, headers, dl_url)
+                album.start_download()
+            elif dl_type == 'artist':
+                artist = Artist(proxies, headers, args, dl_url)
+                artist.start_download()
+        print('DONE\n')
 
 
 if __name__ == '__main__':

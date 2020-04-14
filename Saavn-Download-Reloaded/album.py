@@ -9,16 +9,17 @@ import json
 from download_manager import Manager
 
 class Album():
-    def __init__(self, proxies, headers):
+    def __init__(self, proxies, headers, url=None):
         requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
         self.proxies = proxies
         self.headers = headers
         self.albumID = None
         self.songs_json = []
         self.album_name = ''
+        self.url = url
 
     def getAlbumID(self):
-        input_url = input('Enter the Album url: ').strip()
+        input_url = self.url
         try:
             res = requests.get(input_url, proxies=self.proxies, headers=self.headers)
         except Exception as e:

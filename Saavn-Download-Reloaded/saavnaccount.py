@@ -171,14 +171,20 @@ class Account():
 
             print('Adding songs to new account')
             songs = olibrary_json.get('song')
+            if songs is None:
+                songs = []
             for song in songs:
                 session.get('https://www.saavn.com/api.php?_marker=0&entity_type=song&entity_ids={0}&_format=json&__call=library.add'.format(song))
             print('Adding adding albums to new account')
             albums = olibrary_json.get('album')
+            if albums is None:
+                albums = []
             for album in albums:
                 session.get('https://www.saavn.com/api.php?_marker=0&entity_type=album&entity_ids={0}&_format=json&__call=library.add'.format(album))
             print('Adding playlists to new account')
             playlists = olibrary_json.get('playlist')
+            if playlists is None:
+                playlists = []
             for playlist in playlists:
                 songs_json = []
                 response = requests.get(
@@ -243,15 +249,18 @@ class Account():
             print('Invalid parameters entered !!!')
             return
 
-    def create_user(self):
-        email = input('Enter the email: ')
-        password = input('Enter the password: ')
+    def create_user(self, email=None, password=None):
+        if email is None and password is None:
+            email = self.email
+            password = self.password
         success = self.createAccount(email, password)
         if success:
             self.activateLibrary(email, password)
             print('\nSUCCESS')
             print('Your Account email is: ', email)
             print('Your Account password is: ',password)
+        else:
+            print('Failed to create user')
     
     def start_download_playlist(self):
         playlist = Playlist(self.proxies, self.headers)

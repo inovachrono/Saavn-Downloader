@@ -7,7 +7,7 @@ from album import Album
 from download_manager import Manager
 
 class Artist():
-    def __init__(self, proxies, headers, args):
+    def __init__(self, proxies, headers, args, url=None):
         requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
         self.proxies = proxies
         self.headers = headers
@@ -16,6 +16,7 @@ class Artist():
         self.artist_name = None
         self.artist_json = []
         self.album_IDs_artist = []
+        self.url = url
     
     def getArtistAlbumsIDs(self):
         try:
@@ -46,8 +47,7 @@ class Artist():
 
     def getArtist(self):
         try:
-            url_in_url = input('Enter the Artist URL: ')
-            response = requests.get(url_in_url, proxies=self.proxies, headers=self.headers)
+            response = requests.get(self.url, proxies=self.proxies, headers=self.headers)
             soup = BeautifulSoup(response.text, 'lxml')
             self.artistID = soup.select('.actions.clr')[0].find('a')['data-id']   # Gets Artist ID from follow button
             url = 'https://www.jiosaavn.com/api.php?_marker=0&_format=json&__call=artist.getArtistPageDetails&artistId={0}'.format(self.artistID)
@@ -58,13 +58,13 @@ class Artist():
             print(str(e))
             print('Please check that the entered URL is for an Artist')
             exit()
-        if self.args.album:
+        if self.args.song:
+            print('Downloading all Artist songs')
+            self.downloadArtistAllSongs()
+        else:
             print('Downloading all albums for the Artist')
             self.getArtistAlbumsIDs()
             self.downloadArtistAllAlbums()
-        elif self.args.song:
-            print('Downloading all Artist songs')
-            self.downloadArtistAllSongs()
     
     def downloadArtistAllAlbums(self):
         if self.album_IDs_artist:

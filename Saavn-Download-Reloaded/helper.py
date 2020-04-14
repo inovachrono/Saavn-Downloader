@@ -2,6 +2,15 @@ from pyDes import *
 import os
 import argparse
 
+def scan_url(url):
+    url_parts = url.split('/')
+    if 'album' in url_parts:
+        return 'album'
+    elif 'artist' in url_parts:
+        return 'artist'
+    elif 'playlist' in url_parts or 'featured' in url_parts:
+        return 'playlist'
+
 def setProxy():
     proxy_ip = ''
     if ('http_proxy' in os.environ):
@@ -46,5 +55,10 @@ def argManager():
     parser.add_argument("-clone", "--clone", action="store_true", help="Clone songs,albums,playlists to new account")
     parser.add_argument("-create", "--create", action="store_true", help="To create new account for cloning")
     parser.add_argument("-copy", "--copy", action="store_true", help="To copy to another account")
+
+    parser.add_argument("-o", "--outFolder", help="Path to store the Downloaded songs folder")
+    parser.add_argument("-u", "--url", help="URL of the playlist, album, artist")
+    parser.add_argument("-e", "--email", help="Email of the Jio Saavn User")
+    parser.add_argument("-pw", "--password", help="Password of the Jio Saavn User")
     args = parser.parse_args()
     return args
