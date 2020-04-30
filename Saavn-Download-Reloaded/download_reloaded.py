@@ -11,7 +11,19 @@ from saavnaccount import Account
 
 class Download():
     def __init__(self):
-        pass
+        urls = []
+
+    def read_urls(self, filepath):
+        urls = []
+        with open(filepath, "r") as fh:
+            while True:
+                url = fh.readline().strip()
+                print(url)
+                if url:
+                    urls.append(url)
+                else:
+                    break
+        return urls
 
     def run(self):
         args = argManager()
@@ -39,21 +51,24 @@ class Download():
         # Manage for all default downloads
         # Note: Passing the url parameter to the contructor of Playlist, Album and Artist is must
         else:
-            if args.url is None:
-                dl_url = input("Enter the URL : ").strip()
+            if args.url is None and args.file is None:
+                dl_urls = [input("Enter the URL : ").strip()]
+            elif args.url is None and args.file:
+                dl_urls = self.read_urls(args.file)
             else:
-                dl_url = args.url
-            
-            dl_type = scan_url(url=dl_url)
-            if dl_type == 'playlist':      
-                playlist = Playlist(proxies, headers, dl_url)
-                playlist.start_download()
-            elif dl_type == 'album':
-                album = Album(proxies, headers, dl_url)
-                album.start_download()
-            elif dl_type == 'artist':
-                artist = Artist(proxies, headers, args, dl_url)
-                artist.start_download()
+                dl_urls = [args.url]
+
+            for dl_url in dl_urls:
+                dl_type = scan_url(url=dl_url)
+                if dl_type == 'playlist':      
+                    playlist = Playlist(proxies, headers, dl_url)
+                    playlist.start_download()
+                elif dl_type == 'album':
+                    album = Album(proxies, headers, dl_url)
+                    album.start_download()
+                elif dl_type == 'artist':
+                    artist = Artist(proxies, headers, args, dl_url)
+                    artist.start_download()
         print('DONE\n')
 
 

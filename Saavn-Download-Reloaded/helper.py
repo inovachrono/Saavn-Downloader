@@ -60,5 +60,6 @@ def argManager():
     parser.add_argument("-u", "--url", help="URL of the playlist, album, artist")
     parser.add_argument("-e", "--email", help="Email of the Jio Saavn User")
     parser.add_argument("-pw", "--password", help="Password of the Jio Saavn User")
+    parser.add_argument("-f", "--file", help="file with the urls of albums, playlists, artists")
     args = parser.parse_args()
     return args
