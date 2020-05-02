@@ -18,8 +18,11 @@ class Album():
         self.album_name = ''
         self.url = url
 
-    def getAlbumID(self):
-        input_url = self.url
+    def getAlbumID(self, url=None):
+        if url:
+            input_url = url
+        else:
+            input_url = self.url
         try:
             res = requests.get(input_url, proxies=self.proxies, headers=self.headers)
         except Exception as e:

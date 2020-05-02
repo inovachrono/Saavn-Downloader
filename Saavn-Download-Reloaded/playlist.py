@@ -17,8 +17,11 @@ class Playlist():
         self.songs_json = []
         self.url = url
 
-    def getPlayListID(self):
-        input_url = self.url
+    def getPlaylistID(self, url=None):
+        if url:
+            input_url = url
+        else:
+            input_url = self.url
         try:
             res = requests.get(input_url, proxies=self.proxies, headers=self.headers)
         except Exception as e:
@@ -31,7 +34,7 @@ class Playlist():
     def setPlaylistID(self, playlistID=None):
         self.playlistID = playlistID
 
-    def getPlayList(self, playlistID=None):
+    def getPlaylist(self, playlistID=None):
         if playlistID is None:
             playlistID = self.playlistID
         response = requests.get(
@@ -43,11 +46,11 @@ class Playlist():
     
     def downloadPlaylist(self):
         if self.playlistID is not None:
-            print("Initiating PlayList Downloading")
+            print("Initiating Playlist Downloading")
             manager = Manager()
-            manager.downloadSongs(self.getPlayList())
+            manager.downloadSongs(self.getPlaylist())
             sys.exit()
     
     def start_download(self):
-        self.getPlayListID()
+        self.getPlaylistID()
         self.downloadPlaylist()

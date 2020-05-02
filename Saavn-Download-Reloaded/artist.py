@@ -17,6 +17,17 @@ class Artist():
         self.artist_json = []
         self.album_IDs_artist = []
         self.url = url
+
+    def getArtistID(self, url=None):
+        if url:
+            self.url = url
+        response = requests.get(self.url, proxies=self.proxies, headers=self.headers)
+        soup = BeautifulSoup(response.text, 'lxml')
+        self.artistID = soup.select('.actions.clr')[0].find('a')['data-id']   # Gets Artist ID from follow button
+        return self.artistID
+
+    def setArtistID(self, artistID):
+        self.artistID = artistID
     
     def getArtistAlbumsIDs(self):
         try:
@@ -47,9 +58,7 @@ class Artist():
 
     def getArtist(self):
         try:
-            response = requests.get(self.url, proxies=self.proxies, headers=self.headers)
-            soup = BeautifulSoup(response.text, 'lxml')
-            self.artistID = soup.select('.actions.clr')[0].find('a')['data-id']   # Gets Artist ID from follow button
+            self.getArtistID()
             url = 'https://www.jiosaavn.com/api.php?_marker=0&_format=json&__call=artist.getArtistPageDetails&artistId={0}'.format(self.artistID)
             response = requests.get(url, proxies=self.proxies, headers=self.headers)
             self.artist_json = [x for x in response.text.splitlines() if x.strip().startswith('{')][0]
