@@ -10,6 +10,8 @@ def scan_url(url):
         return 'artist'
     elif 'playlist' in url_parts or 'featured' in url_parts:
         return 'playlist'
+    elif 'song' in url_parts:
+        return 'song'
 
 def setProxy():
     proxy_ip = ''
@@ -57,9 +59,9 @@ def argManager():
     parser.add_argument("-copy", "--copy", action="store_true", help="To copy to another account")
 
     parser.add_argument("-o", "--outFolder", help="Path to store the Downloaded songs folder")
-    parser.add_argument("-u", "--url", help="URL of the playlist, album, artist")
+    parser.add_argument("-u", "--url", help="URL of the song, playlist, album, artist")
     parser.add_argument("-e", "--email", help="Email of the Jio Saavn User")
     parser.add_argument("-pw", "--password", help="Password of the Jio Saavn User")
-    parser.add_argument("-f", "--file", help="file with the urls of albums, playlists, artists")
+    parser.add_argument("-f", "--file", help="file with the urls of songs, albums, playlists, artists")
     args = parser.parse_args()
     return args

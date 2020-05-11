@@ -7,6 +7,7 @@ from helper import argManager, setProxy, scan_url
 from playlist import Playlist
 from album import Album
 from artist import Artist
+from song import Song
 from saavnaccount import Account
 
 class Download():
@@ -69,6 +70,9 @@ class Download():
                 elif dl_type == 'artist':
                     artist = Artist(proxies, headers, args, dl_url)
                     artist.start_download()
+                elif dl_type == 'song':
+                    song = Song(proxies, headers, dl_url)
+                    song.start_download()
         print('DONE\n')
 
 
