@@ -43,6 +43,8 @@ class Download():
                 account.start_download_playlist()
             elif args.a:
                 account.start_download_album()
+            elif args.s:
+                account.start_download_podcast()
             elif args.clone:
                 account.get_details_n_clone(args.clone, args.create, args.copy)
             elif args.create:

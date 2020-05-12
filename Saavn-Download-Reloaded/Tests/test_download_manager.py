@@ -22,7 +22,7 @@ class TestDownloadManager():
         des_cipher = manager_obj.setDecipher()
         enc_url = "ID2ieOjCrwfgWvL5sXl4B1ImC5QfbsDy9OyCHwmG0FcgA1ieF26kd4Vm\/WhQL0FHWbLZmxKh9EBgAPgqc99pQBw7tS9a8Gtq"
         dec_url = manager_obj.get_dec_url(des_cipher, enc_url)
-        assert dec_url == "https://aac.saavncdn.com/274/5ec5d630172f4cf8e143fe7ec8fc816d_96.mp4"
+        assert dec_url == "https://aac.saavncdn.com/274/5ec5d630172f4cf8e143fe7ec8fc816d_320.mp4"
 
     def test_format_filename(self, manager_obj):
         filename = manager_obj.format_filename('Psycho *Saiyaan ?(From "Saaho")')

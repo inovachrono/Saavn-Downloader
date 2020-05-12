@@ -3,6 +3,7 @@ import json
 
 from playlist import Playlist
 from album import Album
+from podcast import Podcast
 from download_manager import Manager
 
 class Account():
@@ -271,7 +272,7 @@ class Account():
             for pl in playlistIDs:
                 playlistID = pl['id']
                 manager = Manager()
-                songs_json = playlist.getPlayList(playlistID)
+                songs_json = playlist.getPlaylist(playlistID)
                 manager.downloadSongs(songs_json)
     
     def start_download_album(self):
@@ -286,3 +287,8 @@ class Account():
                     album.downloadAlbum()
                 except:
                     print('Error getting album with ID: {}'.format(albumID))
+    
+    def start_download_podcast(self):
+        library_json, session = self.getLibrarySession()
+        podcast = Podcast(self.proxies, self.headers)
+        podcast.dowloadAllPodcasts(library_json)

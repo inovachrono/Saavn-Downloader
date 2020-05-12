@@ -51,6 +51,7 @@ $ python3 download_reloaded.py -o /home/monu/Desktop/
 $ python download_reloaded.py -album
 $ Paste the URL of Artist Profile: https://www.jiosaavn.com/artist/babbal-rai-albums/pRd5ZTGrLv8_
 ``` 
+*\*If none of the flag such as --album, --song is specified for the artist then by default the Artist music will be downloaded in Album folder structure i.e. there will be as many album folders as the number of albums an artist has on jiosaavn and not a single songs folder that you get when --song flag is specified.  
 
 
 #### Download All Songs of an Artist
@@ -71,7 +72,7 @@ $ Enter your Password: your_saavn_password
 
 #### You can also specify the username and password in the arguments using -e or --email, -pw or --password
 ```sh
-$ python3 download_reloaded.py -e YOUR_EMAIL -pw YOUR_PASSWORD -p
+$ python3 download_reloaded.py -user -e YOUR_EMAIL -pw YOUR_PASSWORD -p
 ```
 
 #### Download All Albums from your profile
@@ -83,7 +84,7 @@ $ Enter your Password: your_saavn_password
 
 #### Clone songs, albums and playlists to a new account(account created by script itself)
 ```sh
-$ python3 download_reloaded.py -clone -create
+$ python3 download_reloaded.py -user -clone -create
 $ Enter original account email(FROM): from_account_email
 $ Enter original account password(FROM): from_account_password
 $ Enter the email for new account(TO): new_account_email
@@ -92,7 +93,7 @@ $ Enter the password for new account(TO): new_account_password
 
 #### Clone songs, albums and playlists to another account(must alreay exist)
 ```sh
-$ python3 download_reloaded.py -clone -copy
+$ python3 download_reloaded.py -user -clone -copy
 $ Enter original account email(FROM): from_account_email
 $ Enter original account password(FROM): from_account_password
 $ Enter the email of copy account(TO): to_account_email
@@ -101,7 +102,7 @@ $ Enter the password of copy account(TO): to_account_password
 
 #### Create new account
 ```sh
-$ python3 download_reloaded.py -create
+$ python3 download_reloaded.py -user -create
 $ Enter the email: email_you_want_to_use
 $ Enter the password: password_you_want_to_use
 ```
