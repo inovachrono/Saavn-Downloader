@@ -1,13 +1,9 @@
 import requests
 from bs4 import BeautifulSoup
-from pySmartDL import SmartDL
 import json
-import base64
-import html
-import os
 
-from pyDes import *
-from helper import setProxy, setDecipher, formatFilename, argManager
+
+from helper import setProxy, argManager
 from download_manager import Manager
 
 class Song():
@@ -75,32 +71,19 @@ class Song():
             return self.song_json
 
     def downloadSong(self, album_name='songs', artist_name='Non-Artist'):
-        des_cipher = setDecipher()
+        manager = Manager()
+        des_cipher = manager.setDecipher()
         song = self.song_json[self.songID]
         try:
-            enc_url = base64.b64decode(song["more_info"]['encrypted_media_url'].strip())
-            dec_url = des_cipher.decrypt(enc_url, padmode=PAD_PKCS5).decode('utf-8')
-            dec_url = dec_url.replace('_96.mp4', '_320.mp4')
-            filename = html.unescape(song['title']) + '.m4a'
-            filename = formatFilename(filename)
+            dec_url = manager.get_dec_url(des_cipher, song["more_info"]['encrypted_media_url'])
+            filename = manager.format_filename(song['title'])
         except Exception as e:
             print('Download Error : {0}'.format(e))
         try:
-            if self.args.outFolder is None:
-                location = os.path.join(os.getcwd(), artist_name, album_name, filename)
-            else:
-                location = os.path.join(self.args.outFolder, artist_name, album_name, filename)
-            if os.path.isfile(location):
-                print("Downloaded {0}".format(filename))
-            else :
-                print("Downloading {0}".format(filename))
-                obj = SmartDL(dec_url, location)
-                obj.start()
-                try:
-                    name = song['subtitle']
-                except:
-                    name = ''
-                manager = Manager()
+            location = manager.get_download_location(artist_name, album_name, filename)
+            has_downloaded = manager.start_download(filename, location, dec_url)
+            if has_downloaded:
+                name = song.get('subtitle', '')
                 try:
                     song["song"] = song["title"]
                     song["primary_artists"] = song["more_info"]["artistMap"]["primary_artists"][0]["name"]

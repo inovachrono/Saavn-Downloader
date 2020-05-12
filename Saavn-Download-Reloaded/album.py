@@ -52,7 +52,7 @@ class Album():
     
     def downloadAlbum(self, artist_name=''):
         if self.albumID is not None:
-            print("Initiating Album Downloading")
+            print("Initiating Album Download")
             manager = Manager()
             self.getAlbum()
             if artist_name:

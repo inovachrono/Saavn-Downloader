@@ -9,35 +9,66 @@ import os
 from pySmartDL import SmartDL
 
 from pyDes import *
-from helper import setDecipher, formatFilename, argManager
+from helper import argManager
 
 class Manager():
     def __init__(self):
         self.unicode = str
         self.args = argManager()
     
+    def setDecipher(self):
+        return des(b"38346591", ECB, b"\0\0\0\0\0\0\0\0", pad=None, padmode=PAD_PKCS5)
+    
+    def get_dec_url(self, des_cipher, enc_url):
+        enc_url = base64.b64decode(enc_url.strip())
+        dec_url = des_cipher.decrypt(enc_url, padmode=PAD_PKCS5).decode('utf-8')
+        dec_url = dec_url.replace('_96.mp4', '_320.mp4')
+        return dec_url
+    
+    def format_filename(self, filename):
+        filename = html.unescape(filename) + '.m4a'
+        filename = filename.replace("\"", "'")
+        filename = filename.replace(":", "-")
+        filename = filename.replace('"', "-")
+        filename = filename.replace('/', "-")
+        filename = filename.replace("<", "-")
+        filename = filename.replace(">", "-")
+        filename = filename.replace("?", "-")
+        filename = filename.replace("*", "-")
+        filename = filename.replace("|", "-")
+        return filename
+    
+    def get_download_location(self, *args):
+        if self.args.outFolder is None:
+            location = os.getcwd()
+        else:
+            location = self.args.outFolder
+        for folder in args:
+            location = os.path.join(location, folder)
+        return location
+    
+    def start_download(self, filename, location, dec_url):
+        if os.path.isfile(location):
+            print("Downloaded {0}".format(filename))
+            return False
+        else :
+            print("Downloading {0}".format(filename))
+            obj = SmartDL(dec_url, location)
+            obj.start()
+            return True
+    
     def downloadSongs(self, songs_json, album_name='songs', artist_name='Non-Artist'):
-        des_cipher = setDecipher()
+        des_cipher = self.setDecipher()
         for song in songs_json['songs']:
             try:
-                enc_url = base64.b64decode(song['encrypted_media_url'].strip())
-                dec_url = des_cipher.decrypt(enc_url, padmode=PAD_PKCS5).decode('utf-8')
-                dec_url = dec_url.replace('_96.mp4', '_320.mp4')
-                filename = html.unescape(song['song']) + '.m4a'
-                filename = formatFilename(filename)
+                dec_url = self.get_dec_url(des_cipher, song['encrypted_media_url'])
+                filename = self.format_filename(song['song'])
             except Exception as e:
                 logger.error('Download Error' + str(e))
             try:
-                if self.args.outFolder is None:
-                    location = os.path.join(os.path.sep, os.getcwd(), artist_name, album_name, filename)
-                else:
-                    location = os.path.join(self.args.outFolder, artist_name, album_name, filename)
-                if os.path.isfile(location):
-                    print("Downloaded %s" % filename)
-                else :
-                    print("Downloading %s" % filename)
-                    obj = SmartDL(dec_url, location)
-                    obj.start()
+                location = self.get_download_location(artist_name, album_name, filename)
+                has_downloaded = self.start_download(filename, location, dec_url)
+                if has_downloaded:
                     try:
                         name = songs_json['name'] if ('name' in songs_json) else songs_json['listname']
                     except:

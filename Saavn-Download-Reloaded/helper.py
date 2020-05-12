@@ -27,21 +27,6 @@ def setProxy():
     }
     return proxies, headers
 
-def setDecipher():
-    return des(b"38346591", ECB, b"\0\0\0\0\0\0\0\0", pad=None, padmode=PAD_PKCS5)
-
-def formatFilename(filename):
-    filename = filename.replace("\"", "'")
-    filename = filename.replace(":", "-")
-    filename = filename.replace('"', "-")
-    filename = filename.replace('/', "-")
-    filename = filename.replace("<", "-")
-    filename = filename.replace(">", "-")
-    filename = filename.replace("?", "-")
-    filename = filename.replace("*", "-")
-    filename = filename.replace("|", "-")
-    return filename
-
 def argManager():
     parser = argparse.ArgumentParser()
     parser.add_argument("-artist", "--artist", action="store_true", help="Download for an Artist")

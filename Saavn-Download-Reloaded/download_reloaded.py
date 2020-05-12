@@ -1,7 +1,6 @@
 from bs4 import BeautifulSoup
 import requests
 import logger
-import sys
 
 from helper import argManager, setProxy, scan_url
 from playlist import Playlist

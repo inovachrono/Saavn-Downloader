@@ -10,7 +10,8 @@ class TestHelper():
     @pytest.mark.parametrize("url, result", [
         ("https://www.jiosaavn.com/album/bewafai/y3DlZsa6XD0_", "album"),
         ("https://www.jiosaavn.com/featured/icons---mohd-rafi/HzNAgZVIJT4_", "playlist"),
-        ("https://www.jiosaavn.com/artist/udit-narayan-songs/kLtmb7Vh8Rs_", "artist")])
+        ("https://www.jiosaavn.com/artist/udit-narayan-songs/kLtmb7Vh8Rs_", "artist"),
+        ("https://www.jiosaavn.com/song/psycho-saiyaan-from-saaho/B1EORCx4blc", "song")])
     def test_scan_url(self, url, result):
         assert helper.scan_url(url) == result
 
@@ -18,8 +19,3 @@ class TestHelper():
         proxies, headers = helper.setProxy()
         assert proxies is not None
         assert headers is not None
-
-    def test_formatFilename(self):
-        filename = helper.formatFilename('Shayad (From "Love Aaj Kal")')
-        forbidden = r'"\:/<>?*|'
-        assert forbidden not in filename
