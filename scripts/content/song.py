@@ -3,8 +3,8 @@ from bs4 import BeautifulSoup
 import json
 
 
-from helper import setProxy, argManager
-from download_manager import Manager
+from ..helper import setProxy, argManager
+from ..download_manager import Manager
 
 class Song():
     def __init__(self, proxies, headers, url=None):

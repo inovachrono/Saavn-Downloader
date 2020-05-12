@@ -4,8 +4,8 @@ import json
 import os
 import logger
 
-from helper import setProxy, argManager
-from download_manager import Manager
+from ..helper import setProxy, argManager
+from ..download_manager import Manager
 
 class Podcast:
     def __init__(self, proxies, headers, url=None):

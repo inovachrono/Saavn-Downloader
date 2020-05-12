@@ -13,7 +13,7 @@ class TestArtist():
         parentdir = os.path.dirname(currentdir)
         sys.path.insert(0,parentdir)
 
-        import artist
+        import content.artist
         import helper
 
         proxies, headers = helper.setProxy()

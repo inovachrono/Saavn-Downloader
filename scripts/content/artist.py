@@ -3,8 +3,8 @@ from requests.packages.urllib3.exceptions import InsecureRequestWarning
 from bs4 import BeautifulSoup
 import json
 
-from album import Album
-from download_manager import Manager
+from .album import Album
+from ..download_manager import Manager
 
 class Artist():
     def __init__(self, proxies, headers, args, url=None):

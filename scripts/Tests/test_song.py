@@ -9,7 +9,7 @@ class TestSong():
         parentdir = os.path.dirname(currentdir)
         sys.path.insert(0,parentdir)
 
-        import song
+        import content.song
         import helper
 
         proxies, headers = helper.setProxy()

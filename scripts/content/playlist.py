@@ -5,7 +5,7 @@ import json
 import logger
 import sys
 
-from download_manager import Manager
+from ..download_manager import Manager
 
 
 class Playlist():

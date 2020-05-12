@@ -9,7 +9,7 @@ class TestAlbum():
         parentdir = os.path.dirname(currentdir)
         sys.path.insert(0,parentdir)
 
-        import album
+        from content import album
         import helper
 
         proxies, headers = helper.setProxy()

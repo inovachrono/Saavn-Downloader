@@ -2,12 +2,12 @@ from bs4 import BeautifulSoup
 import requests
 import logger
 
-from helper import argManager, setProxy, scan_url
-from playlist import Playlist
-from album import Album
-from artist import Artist
-from song import Song
-from saavnaccount import Account
+from scripts.helper import argManager, setProxy, scan_url
+from scripts.content.playlist import Playlist
+from scripts.content.album import Album
+from scripts.content.artist import Artist
+from scripts.content.song import Song
+from scripts.saavnaccount import Account
 
 class Download():
     def __init__(self):

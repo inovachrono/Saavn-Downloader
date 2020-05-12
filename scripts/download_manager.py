@@ -8,8 +8,8 @@ import os
 
 from pySmartDL import SmartDL
 
-from pyDes import *
-from helper import argManager
+from .pyDes import *
+from .helper import argManager
 
 class Manager():
     def __init__(self):
@@ -22,7 +22,7 @@ class Manager():
     def get_dec_url(self, des_cipher, enc_url):
         enc_url = base64.b64decode(enc_url.strip())
         dec_url = des_cipher.decrypt(enc_url, padmode=PAD_PKCS5).decode('utf-8')
-        dec_url = dec_url.replace('_96.mp4', '_320.mp4')
+        # dec_url = dec_url.replace('_96.mp4', '_320.mp4')
         return dec_url
     
     def format_filename(self, filename):

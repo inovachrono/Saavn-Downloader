@@ -6,7 +6,7 @@ import logger
 import re
 import json
 
-from download_manager import Manager
+from ..download_manager import Manager
 
 class Album():
     def __init__(self, proxies, headers, url=None):

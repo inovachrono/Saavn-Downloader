@@ -1,10 +1,10 @@
 import requests
 import json
 
-from playlist import Playlist
-from album import Album
-from podcast import Podcast
-from download_manager import Manager
+from .content.playlist import Playlist
+from .content.album import Album
+from .content.podcast import Podcast
+from .download_manager import Manager
 
 class Account():
     def __init__(self, proxies, headers, email, password):
