@@ -34,7 +34,6 @@ class Podcast:
     
     def downloadPodcast(self, show_json):
         manager = Manager()
-        des_cipher = manager.setDecipher()
         show_name = show_json.get(0)[0]['more_info']['show_title']
         print("Show Name: {}".format(show_name))
         for season, season_json in show_json.items():
@@ -42,7 +41,7 @@ class Podcast:
             print("Season: {}".format(season_name))
             for episode in season_json:
                 try:
-                    dec_url = manager.get_dec_url(des_cipher, episode['more_info']['encrypted_media_url'])
+                    dec_url = manager.get_dec_url(episode['more_info']['encrypted_media_url'])
                     # dec_url = dec_url.replace('_96.mp4', '_320.mp4')   # Change in url gives invalid xml
                     filename = manager.format_filename(episode['title'])
                 except Exception as e:

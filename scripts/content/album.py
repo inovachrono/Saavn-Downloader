@@ -29,8 +29,13 @@ class Album():
             logger.error('Error accessing website error: ' + str(e))
             exit()
         soup = BeautifulSoup(res.text, 'lxml')
-        self.albumID = soup.select(".play")[0]["onclick"]
-        self.albumID = ast.literal_eval(re.search("\[(.*?)\]", self.albumID).group())[1]
+        try:
+            self.albumID = soup.select(".play")[0]["onclick"]
+            self.albumID = ast.literal_eval(re.search("\[(.*?)\]", self.albumID).group())[1]
+        except:
+            self.albumID = soup.select("#share-btn")[0]["onclick"]
+            self.albumID = re.search('\".*id.*:.*\d+\"', self.albumID).group()
+            self.albumID = re.search("\d+", self.albumID).group()
         return self.albumID
     
     def setAlbumID(self, albumID):

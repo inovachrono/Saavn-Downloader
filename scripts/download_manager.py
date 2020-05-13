@@ -15,14 +15,15 @@ class Manager():
     def __init__(self):
         self.unicode = str
         self.args = argManager()
+        self.des_cipher = self.setDecipher()
     
     def setDecipher(self):
         return des(b"38346591", ECB, b"\0\0\0\0\0\0\0\0", pad=None, padmode=PAD_PKCS5)
     
-    def get_dec_url(self, des_cipher, enc_url):
+    def get_dec_url(self, enc_url):
         enc_url = base64.b64decode(enc_url.strip())
-        dec_url = des_cipher.decrypt(enc_url, padmode=PAD_PKCS5).decode('utf-8')
-        # dec_url = dec_url.replace('_96.mp4', '_320.mp4')
+        dec_url = self.des_cipher.decrypt(enc_url, padmode=PAD_PKCS5).decode('utf-8')
+        dec_url = dec_url.replace('_96.mp4', '_320.mp4')
         return dec_url
     
     def format_filename(self, filename):
@@ -58,10 +59,9 @@ class Manager():
             return True
     
     def downloadSongs(self, songs_json, album_name='songs', artist_name='Non-Artist'):
-        des_cipher = self.setDecipher()
         for song in songs_json['songs']:
             try:
-                dec_url = self.get_dec_url(des_cipher, song['encrypted_media_url'])
+                dec_url = self.get_dec_url(song['encrypted_media_url'])
                 filename = self.format_filename(song['song'])
             except Exception as e:
                 logger.error('Download Error' + str(e))

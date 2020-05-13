@@ -72,10 +72,9 @@ class Song():
 
     def downloadSong(self, album_name='songs', artist_name='Non-Artist'):
         manager = Manager()
-        des_cipher = manager.setDecipher()
         song = self.song_json[self.songID]
         try:
-            dec_url = manager.get_dec_url(des_cipher, song["more_info"]['encrypted_media_url'])
+            dec_url = manager.get_dec_url(song["more_info"]['encrypted_media_url'])
             filename = manager.format_filename(song['title'])
         except Exception as e:
             print('Download Error : {0}'.format(e))

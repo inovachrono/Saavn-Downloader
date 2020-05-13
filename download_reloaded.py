@@ -16,13 +16,10 @@ class Download():
     def read_urls(self, filepath):
         urls = []
         with open(filepath, "r") as fh:
-            while True:
-                url = fh.readline().strip()
-                print(url)
+            for line in fh:
+                url = line.strip()
                 if url:
                     urls.append(url)
-                else:
-                    break
         return urls
 
     def run(self):
