@@ -1,20 +1,11 @@
 import pytest
-import sys
 
-#   argparse rasing exception, following 2 lines solved it
-sys.argv=['']
-del sys
 #   TODO: Further tests to be written
 class TestArtist():
     @pytest.fixture(scope="module")
     def artist_obj(self):
-        import os,sys,inspect
-        currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
-        parentdir = os.path.dirname(currentdir)
-        sys.path.insert(0,parentdir)
-
-        import content.artist
-        import helper
+        from scripts.content import artist
+        from scripts import helper
 
         proxies, headers = helper.setProxy()
         args = helper.argManager()

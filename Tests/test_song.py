@@ -4,13 +4,8 @@ import pytest
 class TestSong():
     @pytest.fixture(scope="module")
     def song_obj(self):
-        import os,sys,inspect
-        currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
-        parentdir = os.path.dirname(currentdir)
-        sys.path.insert(0,parentdir)
-
-        import content.song
-        import helper
+        from scripts.content import song
+        from scripts import helper
 
         proxies, headers = helper.setProxy()
         return song.Song(proxies, headers, url="https://www.jiosaavn.com/song/dekha-ek-khwab/QVsJYCJYAV0")

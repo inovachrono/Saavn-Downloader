@@ -4,13 +4,8 @@ import pytest
 class TestAlbum():
     @pytest.fixture(scope="module")
     def album_obj(self):
-        import os,sys,inspect
-        currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
-        parentdir = os.path.dirname(currentdir)
-        sys.path.insert(0,parentdir)
-
-        from content import album
-        import helper
+        from scripts.content import album
+        from scripts import helper
 
         proxies, headers = helper.setProxy()
         return album.Album(proxies, headers, url="https://www.jiosaavn.com/album/kuch-bhi-ho-jaye/2EvVc5JXg3I_")

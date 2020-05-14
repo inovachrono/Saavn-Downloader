@@ -10,12 +10,7 @@ del sys
 class TestDownloadManager():
     @pytest.fixture(scope="module")
     def manager_obj(self):
-        import sys,inspect
-        currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
-        parentdir = os.path.dirname(currentdir)
-        sys.path.insert(0,parentdir)
-
-        import download_manager
+        from scripts import download_manager
         return download_manager.Manager()
 
     def test_get_dec_url(self, manager_obj):

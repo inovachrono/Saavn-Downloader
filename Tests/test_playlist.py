@@ -4,13 +4,8 @@ import pytest
 class TestPlaylist():
     @pytest.fixture(scope="module")
     def playlist_obj(self):
-        import os,sys,inspect
-        currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
-        parentdir = os.path.dirname(currentdir)
-        sys.path.insert(0,parentdir)
-
-        import content.playlist
-        import helper
+        from scripts.content import playlist
+        from scripts import helper
 
         proxies, headers = helper.setProxy()
         return playlist.Playlist(proxies, headers, url="https://www.jiosaavn.com/featured/90s-king---kumar-sanu/QeBmhG7Y1uE_")
