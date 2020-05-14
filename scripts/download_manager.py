@@ -12,6 +12,7 @@ from .pyDes import *
 from .helper import argManager
 
 class Manager():
+    count = 1
     def __init__(self):
         self.unicode = str
         self.args = argManager()
@@ -37,6 +38,8 @@ class Manager():
         filename = filename.replace("?", "-")
         filename = filename.replace("*", "-")
         filename = filename.replace("|", "-")
+        filename = str(self.count) + '. ' + filename
+        self.count += 1
         return filename
     
     def get_download_location(self, *args):
