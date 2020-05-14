@@ -117,6 +117,7 @@ $ Enter the password: password_you_want_to_use
 
 ### Known Issues
   - Clone Functionality doesn't work with Saavn-Download-Reloaded package
+  - Songs not having 320kbps don't get their meta data added
   - No Meta Data in JioSaavn Originals and Podcasts
 
 ### Development

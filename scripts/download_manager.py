@@ -73,10 +73,14 @@ class Manager():
                         name = songs_json['name'] if ('name' in songs_json) else songs_json['listname']
                     except:
                         name = ''
-                    self.addtags(location, song, name)
+                    try:
+                        self.addtags(location, song, name)
+                    except Exception as e:
+                        print("============== Error Adding Meta Data ==============")
+                        print("Error : {0}".format(e))
                     print('\n')
             except Exception as e:
-                logger.error('Download Error' + str(e))
+                logger.error('Download Error : {0}'.format(e))
     
     def addtags(self, filename, json_data, playlist_name):
         audio = MP4(filename)
