@@ -1,3 +1,5 @@
+![Python application](https://github.com/monuyadav016/Saavn-Downloader/workflows/Python%20application/badge.svg)
+
 # Saavn Downloader
 The fullset of functionality offered are:
   - High Qualtiy - M4A (320 Kbps bitrate)
