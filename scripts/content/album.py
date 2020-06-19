@@ -7,6 +7,7 @@ import re
 import json
 
 from ..download_manager import Manager
+from ..helper import fix_json
 
 class Album():
     def __init__(self, proxies, headers, url=None):
@@ -30,12 +31,15 @@ class Album():
             exit()
         soup = BeautifulSoup(res.text, 'lxml')
         try:
-            self.albumID = soup.select(".play")[0]["onclick"]
-            self.albumID = ast.literal_eval(re.search("\[(.*?)\]", self.albumID).group())[1]
-        except:
-            self.albumID = soup.select("#share-btn")[0]["onclick"]
-            self.albumID = re.search('\".*id.*:.*\d+\"', self.albumID).group()
-            self.albumID = re.search("\d+", self.albumID).group()
+            script = None
+            for sibling in soup.find("div", attrs={"id": "music-player"}).next_siblings:
+                if sibling.name == "script":
+                    script = sibling
+            content = script.text[script.text.find("{"):]
+            content_json = fix_json(content)
+            self.albumID = content_json["albumView"]["album"]["id"]
+        except Exception as e:
+            print("Unable to get albumID: {0}".format(e))
         return self.albumID
     
     def setAlbumID(self, albumID):

@@ -6,6 +6,7 @@ import logger
 import sys
 
 from ..download_manager import Manager
+from ..helper import fix_json
 
 
 class Playlist():
@@ -28,7 +29,13 @@ class Playlist():
             logger.error('Error accessing website error: ' + str(e))
             exit()
         soup = BeautifulSoup(res.text, "lxml")
-        self.playlistID = soup.select(".flip-layout")[0]["data-listid"]
+        script = None
+        for sibling in soup.find("div", attrs={"id": "music-player"}).next_siblings:
+            if sibling.name == "script":
+                script = sibling
+        content = script.text[script.text.find("{"):]
+        content_json = fix_json(content)
+        self.playlistID = content_json["playlist"]["playlist"]["id"]
         return self.playlistID
     
     def setPlaylistID(self, playlistID=None):
