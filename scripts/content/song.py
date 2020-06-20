@@ -1,5 +1,4 @@
 import requests
-from bs4 import BeautifulSoup
 import json
 
 
@@ -42,12 +41,11 @@ class Song():
             input_url = self.url
         else:
             input_url = input("Enter the URL : ")
+        token = input_url.split("/")[-1]
+        input_url = "https://www.jiosaavn.com/api.php?__call=webapi.get&token={0}&type=song&includeMetaTags=0&ctx=web6dot0&api_version=4&_format=json&_marker=0".format(token)
         response = self.session.get(input_url)
         try:
-            soup = BeautifulSoup(response.content, "lxml")
-            song_json = soup.select(".hide.song-json")[0]
-            song_json = json.loads(song_json.text)
-            self.songID = song_json["songid"]
+            self.songID = response.json()["songs"][0]["id"]
             return self.songID
         except Exception as e:
             print("Unable to get the song from URL")

@@ -1,6 +1,5 @@
 import requests
 from requests.packages.urllib3.exceptions import InsecureRequestWarning
-from bs4 import BeautifulSoup
 import json
 
 from .album import Album
@@ -21,9 +20,10 @@ class Artist():
     def getArtistID(self, url=None):
         if url:
             self.url = url
+        token = self.url.split("/")[-1]
+        self.url = "https://www.jiosaavn.com/api.php?__call=webapi.get&token={0}&type=artist&p=&n_song=10&n_album=14&sub_type=&category=&sort_order=&includeMetaTags=0&ctx=web6dot0&api_version=4&_format=json&_marker=0".format(token)
         response = requests.get(self.url, proxies=self.proxies, headers=self.headers)
-        soup = BeautifulSoup(response.text, 'lxml')
-        self.artistID = soup.select('.actions.clr')[0].find('a')['data-id']   # Gets Artist ID from follow button
+        self.artistID = response.json()["artistId"]
         return self.artistID
 
     def setArtistID(self, artistID):

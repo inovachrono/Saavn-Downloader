@@ -1,12 +1,9 @@
-from bs4 import BeautifulSoup
 import requests
 from requests.packages.urllib3.exceptions import InsecureRequestWarning
 import json
 import logger
-import sys
 
 from ..download_manager import Manager
-from ..helper import fix_json
 
 
 class Playlist():
@@ -23,19 +20,14 @@ class Playlist():
             input_url = url
         else:
             input_url = self.url
+        token = input_url.split("/")[-1]
+        input_url = "https://www.jiosaavn.com/api.php?__call=webapi.get&token={0}&type=playlist&p=1&n=20&includeMetaTags=0&ctx=web6dot0&api_version=4&_format=json&_marker=0".format(token)
         try:
             res = requests.get(input_url, proxies=self.proxies, headers=self.headers)
         except Exception as e:
             logger.error('Error accessing website error: ' + str(e))
             exit()
-        soup = BeautifulSoup(res.text, "lxml")
-        script = None
-        for sibling in soup.find("div", attrs={"id": "music-player"}).next_siblings:
-            if sibling.name == "script":
-                script = sibling
-        content = script.text[script.text.find("{"):]
-        content_json = fix_json(content)
-        self.playlistID = content_json["playlist"]["playlist"]["id"]
+        self.playlistID = res.json()["id"]
         return self.playlistID
     
     def setPlaylistID(self, playlistID=None):

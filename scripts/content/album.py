@@ -1,13 +1,9 @@
 import requests
 from requests.packages.urllib3.exceptions import InsecureRequestWarning
-from bs4 import BeautifulSoup
-import ast
 import logger
-import re
 import json
 
 from ..download_manager import Manager
-from ..helper import fix_json
 
 class Album():
     def __init__(self, proxies, headers, url=None):
@@ -24,20 +20,16 @@ class Album():
             input_url = url
         else:
             input_url = self.url
+        token = input_url.split("/")[-1]
+        input_url = "https://www.jiosaavn.com/api.php?__call=webapi.get&token={0}&type=album&includeMetaTags=0&ctx=web6dot0&api_version=4&_format=json&_marker=0".format(token)
         try:
             res = requests.get(input_url, proxies=self.proxies, headers=self.headers)
         except Exception as e:
             logger.error('Error accessing website error: ' + str(e))
             exit()
-        soup = BeautifulSoup(res.text, 'lxml')
         try:
-            script = None
-            for sibling in soup.find("div", attrs={"id": "music-player"}).next_siblings:
-                if sibling.name == "script":
-                    script = sibling
-            content = script.text[script.text.find("{"):]
-            content_json = fix_json(content)
-            self.albumID = content_json["albumView"]["album"]["id"]
+            content_json = res.json()
+            self.albumID = content_json["id"]
         except Exception as e:
             print("Unable to get albumID: {0}".format(e))
         return self.albumID
