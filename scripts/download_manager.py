@@ -3,7 +3,6 @@ import urllib.request
 import html
 import json
 import base64
-import logger
 import os
 
 from pySmartDL import SmartDL
@@ -64,7 +63,7 @@ class Manager():
                 dec_url = self.get_dec_url(song['encrypted_media_url'])
                 filename = self.format_filename(song['song'])
             except Exception as e:
-                logger.error('Download Error' + str(e))
+                print('Download Error: {0}'.format(e))
             try:
                 location = self.get_download_location(artist_name, album_name, filename)
                 has_downloaded = self.start_download(filename, location, dec_url)
@@ -80,7 +79,7 @@ class Manager():
                         print("Error : {0}".format(e))
                     print('\n')
             except Exception as e:
-                logger.error('Download Error : {0}'.format(e))
+                print('Download Error : {0}'.format(e))
     
     def addtags(self, filename, json_data, playlist_name):
         audio = MP4(filename)

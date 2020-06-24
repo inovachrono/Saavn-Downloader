@@ -2,7 +2,6 @@ import requests
 from bs4 import BeautifulSoup
 import json
 import os
-import logger
 
 from ..helper import setProxy, argManager
 from ..download_manager import Manager
@@ -45,7 +44,7 @@ class Podcast:
                     # dec_url = dec_url.replace('_96.mp4', '_320.mp4')   # Change in url gives invalid xml
                     filename = manager.format_filename(episode['title'])
                 except Exception as e:
-                    logger.error('Download Error' + str(e))
+                    print('Download Error: {0}'.format(e))
                 try:
                     location = manager.get_download_location(show_name, season_name, filename)
                     has_downloaded = manager.start_download("Show: {} - Season: {} - Episode: {}".format(
@@ -55,7 +54,7 @@ class Podcast:
                         # TODO: Add tags for to the podcast episodes
                         print('\n')
                 except Exception as e:
-                    logger.error('Download Error' + str(e))
+                    print('Download Error: {0}'.format(e))
     
     def dowloadAllPodcasts(self, library_json):
         if library_json.get('show') is not None:

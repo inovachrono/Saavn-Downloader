@@ -1,6 +1,5 @@
 import requests
 from requests.packages.urllib3.exceptions import InsecureRequestWarning
-import logger
 import json
 
 from ..download_manager import Manager
@@ -25,7 +24,7 @@ class Album():
         try:
             res = requests.get(input_url, proxies=self.proxies, headers=self.headers)
         except Exception as e:
-            logger.error('Error accessing website error: ' + str(e))
+            print('Error accessing website error: {0}'.format(e))
             exit()
         try:
             content_json = res.json()
