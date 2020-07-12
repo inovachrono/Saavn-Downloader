@@ -83,11 +83,12 @@ class Song():
                 name = song.get('subtitle', '')
                 try:
                     song["song"] = song["title"]
-                    song["primary_artists"] = song["more_info"]["artistMap"]["primary_artists"][0]["name"]
+                    song["primary_artists"] = ", ".join([artist["name"] for artist in song["more_info"]["artistMap"]["primary_artists"]])
                     song["album"] = song["more_info"]["album"]
-                    song["singers"] = ", ".join([artist["name"] for artist in song["more_info"]["artistMap"]["primary_artists"]])
+                    song["singers"] = song["primary_artists"]
                     song["music"] = song["more_info"]["music"]
-                    song["starring"] = ""
+                    song["starring"] = ", ".join(
+                        [artist["name"] for artist in song["more_info"]["artistMap"]["artists"] if artist['role'] == 'starring'])
                     song["label"] = song["more_info"]["label"]
                 except Exception as e:
                     print("Error creating song tag information")
