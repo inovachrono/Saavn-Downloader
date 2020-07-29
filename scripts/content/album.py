@@ -56,9 +56,9 @@ class Album():
             manager = Manager()
             self.getAlbum()
             if artist_name:
-                manager.downloadSongs(self.songs_json, self.album_name, artist_name=artist_name)
+                manager.downloadSongs(None, self.songs_json, self.album_name, artist_name=artist_name)
             else:
-                manager.downloadSongs(self.songs_json, self.album_name)
+                manager.downloadSongs(None, self.songs_json, self.album_name)
     
     def start_download(self):
         self.getAlbumID()

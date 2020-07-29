@@ -26,7 +26,7 @@ class Manager():
         return dec_url
     
     def format_filename(self, filename):
-        filename = html.unescape(filename) + '.m4a'
+        filename = html.unescape(filename)
         filename = filename.replace("\"", "'")
         filename = filename.replace(":", "-")
         filename = filename.replace('"', "-")
@@ -44,7 +44,8 @@ class Manager():
         else:
             location = self.args.outFolder
         for folder in args:
-            location = os.path.join(location, folder)
+            if folder != None:
+                location = os.path.join(location, folder)
         return location
     
     def start_download(self, filename, location, dec_url):
@@ -57,15 +58,19 @@ class Manager():
             obj.start()
             return True
     
-    def downloadSongs(self, songs_json, album_name='songs', artist_name='Non-Artist'):
+    def downloadSongs(self, playlistTitle, songs_json, album_name='songs', artist_name=None):
         for song in songs_json['songs']:
             try:
                 dec_url = self.get_dec_url(song['encrypted_media_url'])
-                filename = self.format_filename(song['song'])
+                filename = self.format_filename(song['song']) + '.m4a'
+                album_name = self.format_filename(song["album"])
+                # album_name = self.format_filename(song["year"]) + "-" + self.format_filename(song["album"])
             except Exception as e:
                 print('Download Error: {0}'.format(e))
             try:
-                location = self.get_download_location(artist_name, album_name, filename)
+                location = self.get_download_location(playlistTitle, artist_name, album_name, filename)
+                # print("downloadSongs:" + location)
+                # print(song)
                 has_downloaded = self.start_download(filename, location, dec_url)
                 if has_downloaded:
                     try:

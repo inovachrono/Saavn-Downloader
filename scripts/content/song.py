@@ -77,7 +77,7 @@ class Song():
         except Exception as e:
             print('Download Error : {0}'.format(e))
         try:
-            location = manager.get_download_location(artist_name, album_name, filename)
+            location = manager.get_download_location(None, artist_name, album_name, filename)
             has_downloaded = manager.start_download(filename, location, dec_url)
             if has_downloaded:
                 name = song.get('subtitle', '')

@@ -58,7 +58,7 @@ class Download():
 
             for dl_url in dl_urls:
                 dl_type = scan_url(url=dl_url)
-                if dl_type == 'playlist':      
+                if dl_type == 'playlist':
                     playlist = Playlist(proxies, headers, dl_url)
                     playlist.start_download()
                 elif dl_type == 'album':

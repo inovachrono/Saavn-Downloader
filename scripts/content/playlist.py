@@ -11,10 +11,12 @@ class Playlist():
         self.proxies = proxies
         self.headers = headers
         self.playlistID = None
+        self.playlistTitle = None
+        self.playlistObj = []
         self.songs_json = []
         self.url = url
 
-    def getPlaylistID(self, url=None):
+    def getPlaylistObj(self, url=None):
         if url:
             input_url = url
         else:
@@ -26,13 +28,15 @@ class Playlist():
         except Exception as e:
             print('Error accessing website error: {0}'.format(e))
             exit()
+        self.playlistObj = res.json()
         self.playlistID = res.json()["id"]
-        return self.playlistID
+        self.playlistTitle = res.json()["title"]
+        return self.playlistObj
     
     def setPlaylistID(self, playlistID=None):
         self.playlistID = playlistID
 
-    def getPlaylist(self, playlistID=None):
+    def getPlaylistDetails(self, playlistID=None):
         if playlistID is None:
             playlistID = self.playlistID
         response = requests.get(
@@ -44,10 +48,12 @@ class Playlist():
     
     def downloadPlaylist(self):
         if self.playlistID is not None:
-            print("Initiating Playlist Downloading")
+            print("Initiating Playlist Downloading of:" + self.playlistTitle)
             manager = Manager()
-            manager.downloadSongs(self.getPlaylist())
+            manager.downloadSongs(self.playlistTitle, self.getPlaylistDetails())
     
     def start_download(self):
-        self.getPlaylistID()
+        self.getPlaylistObj()
+        # self.getPlaylistObj()
+        # print(self.playlistObj)
         self.downloadPlaylist()

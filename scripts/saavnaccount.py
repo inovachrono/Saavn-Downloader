@@ -273,7 +273,7 @@ class Account():
                 playlistID = pl['id']
                 manager = Manager()
                 songs_json = playlist.getPlaylist(playlistID)
-                manager.downloadSongs(songs_json)
+                manager.downloadSongs(playlist.playlistTitle, songs_json)
     
     def start_download_album(self):
         library_json, session = self.getLibrarySession()

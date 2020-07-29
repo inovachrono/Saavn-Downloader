@@ -46,7 +46,7 @@ class Podcast:
                 except Exception as e:
                     print('Download Error: {0}'.format(e))
                 try:
-                    location = manager.get_download_location(show_name, season_name, filename)
+                    location = manager.get_download_location(None, show_name, season_name, filename)
                     has_downloaded = manager.start_download("Show: {} - Season: {} - Episode: {}".format(
                         show_name, season_name, filename),
                         location, dec_url)

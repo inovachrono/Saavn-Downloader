@@ -103,7 +103,7 @@ class Artist():
                 self.artist_json = json.loads(self.artist_json)
                 songs_json = self.artist_json['topSongs']   # A dict with key songs having at most 10 songs
                 manager = Manager()
-                manager.downloadSongs(songs_json, artist_name=artist_name)
+                manager.downloadSongs(None, songs_json, artist_name=artist_name)
         except Exception as e:
             print(str(e))
             print('No songs found for the artist')
