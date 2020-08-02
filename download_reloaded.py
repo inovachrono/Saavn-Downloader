@@ -7,6 +7,15 @@ from scripts.content.album import Album
 from scripts.content.artist import Artist
 from scripts.content.song import Song
 from scripts.saavnaccount import Account
+# https://www.jiosaavn.com/album/vinayagar-murugan-songs---tamil-devotional/UFPWAMwxX38_
+# https://www.jiosaavn.com/album/tamil-hindu-devotional-songs/d9Tny456ayc_
+# https://www.jiosaavn.com/album/deivam-thiruvarul/EZ60Zr-SVMc_
+# https://www.jiosaavn.com/album/deivam-thiruvarul/EZ60Zr-SVMc_
+# https://www.jiosaavn.com/featured/muruga-muruga/1m1Gmji50rQ_
+# https://www.jiosaavn.com/album/skantha-shasti-kavacham---sumangalam-sisters/TTeIUfdSZXs_
+# https://www.jiosaavn.com/album/ullam-urugudayyaa/pyv6olifcFc_
+# https://www.jiosaavn.com/featured/t-m-soundararajan-hits-/1Fb7PO-OUs4_
+# https://www.jiosaavn.com/album/agathiyar-aathi-parasakthi/ligcQao8OHA_
 
 class Download():
     def __init__(self):
