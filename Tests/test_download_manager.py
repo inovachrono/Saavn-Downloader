@@ -26,4 +26,4 @@ class TestDownloadManager():
 
     def test_get_download_location(self, manager_obj):
         location = os.path.normpath(manager_obj.get_download_location("Arijit Singh", "Aashiqui 2", "Tum Hi Ho"))
-        assert location == "{0}/Arijit Singh/Aashiqui 2/Tum Hi Ho".format(os.getcwd())
+        assert location == os.path.join(os.getcwd(), "Arijit Singh", "Aashiqui 2", "Tum Hi Ho")
