@@ -10,6 +10,8 @@ from pySmartDL import SmartDL
 from .pyDes import *
 from .helper import argManager
 
+REQUEST_TIMEOUT = 180
+
 class Manager():
     def __init__(self):
         self.unicode = str
@@ -52,8 +54,9 @@ class Manager():
             print("Downloaded {0}".format(filename))
             return False
         else :
-            print("Downloading {0}".format(filename))
-            obj = SmartDL(dec_url, location)
+            print("Downloading {0} : URL : {1}".format(filename, dec_url))
+
+            obj = SmartDL(dec_url, location, threads=1, timeout=REQUEST_TIMEOUT)
             obj.start()
             return True
     

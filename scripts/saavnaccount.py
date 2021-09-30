@@ -52,7 +52,7 @@ class Account():
         }
 
         self.session = requests.Session()
-        response = self.session.post(self.url, headers=self.headers, data=payload)
+        response = self.session.post(self.url, headers=self.headers, data=payload, timeout=180)
         return self.session, response
 
     def createAccount(self, email=None, password=None):
@@ -78,7 +78,7 @@ class Account():
             return False
         elif data.get('data').get('uid'):
             try:
-                response = session.get("https://www.saavn.com/api.php?_marker=0&cc=&ctx=android&state=login&v=224&app_version=6.8.2&api_version=4&_format=json&__call=library.getAll")
+                response = session.get("https://www.saavn.com/api.php?_marker=0&cc=&ctx=android&state=login&v=224&app_version=6.8.2&api_version=4&_format=json&__call=library.getAll", timeout=180)
                 library_json = [x for x in response.text.splitlines() if x.strip().startswith('{')][0]
                 library_json = json.loads(library_json)
                 # print(library_json)
@@ -101,7 +101,7 @@ class Account():
             return False
         elif data.get('data').get('uid'):
             try:
-                response = session.get("https://www.saavn.com/api.php?_marker=0&cc=&ctx=android&state=login&v=224&app_version=6.8.2&api_version=4&_format=json&__call=library.getAll", headers=self.headers)
+                response = session.get("https://www.saavn.com/api.php?_marker=0&cc=&ctx=android&state=login&v=224&app_version=6.8.2&api_version=4&_format=json&__call=library.getAll", headers=self.headers, timeout=180)
                 self.library_json = [x for x in response.text.splitlines() if x.strip().startswith('{')][0]
                 self.library_json = json.loads(self.library_json)
                 # print(self.library_json)
@@ -159,7 +159,7 @@ class Account():
             for playlist in np:
                 songs_json = []
                 response = requests.get(
-                    'https://www.jiosaavn.com/api.php?listid={0}&_format=json&__call=playlist.getDetails'.format(playlist['id']))
+                    'https://www.jiosaavn.com/api.php?listid={0}&_format=json&__call=playlist.getDetails'.format(playlist['id']), timeout=180)
                 if response.status_code == 200:
                     songs_json = [x for x in response.text.splitlines() if x.strip().startswith('{')][0]
                     songs_json = json.loads(songs_json)
@@ -175,13 +175,13 @@ class Account():
             if songs is None:
                 songs = []
             for song in songs:
-                session.get('https://www.saavn.com/api.php?_marker=0&entity_type=song&entity_ids={0}&_format=json&__call=library.add'.format(song))
+                session.get('https://www.saavn.com/api.php?_marker=0&entity_type=song&entity_ids={0}&_format=json&__call=library.add'.format(song), timeout=180)
             print('Adding adding albums to new account')
             albums = olibrary_json.get('album')
             if albums is None:
                 albums = []
             for album in albums:
-                session.get('https://www.saavn.com/api.php?_marker=0&entity_type=album&entity_ids={0}&_format=json&__call=library.add'.format(album))
+                session.get('https://www.saavn.com/api.php?_marker=0&entity_type=album&entity_ids={0}&_format=json&__call=library.add'.format(album), timeout=180)
             print('Adding playlists to new account')
             playlists = olibrary_json.get('playlist')
             if playlists is None:
@@ -189,7 +189,7 @@ class Account():
             for playlist in playlists:
                 songs_json = []
                 response = requests.get(
-                    'https://www.jiosaavn.com/api.php?listid={0}&_format=json&__call=playlist.getDetails'.format(playlist['id']))
+                    'https://www.jiosaavn.com/api.php?listid={0}&_format=json&__call=playlist.getDetails'.format(playlist['id']), timeout=180)
                 if response.status_code == 200:
                     songs_json = [x for x in response.text.splitlines() if x.strip().startswith('{')][0]
                     songs_json = json.loads(songs_json)
@@ -215,7 +215,7 @@ class Account():
                     'network_subtype': '',
                     'model': 'Samsung Galaxy S10'
                 }
-                res = n_session.post('https://www.jiosaavn.com/api.php', headers=self.headers, data=p_copy)
+                res = n_session.post('https://www.jiosaavn.com/api.php', headers=self.headers, data=p_copy, timeout=180)
                 print(playlist['id'])
                 print(res)
                 print(res.text)
