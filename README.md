@@ -16,33 +16,34 @@ The fullset of functionality offered are:
   - Clone an account to another account
   - Create a new account
  
+###### Python 3.8.* recommended if you are installing it fresh for the project
 
 ### Installation
 ```sh
-$ pip3 install -r requirements.txt
+$ pip install -r requirements.txt
 ```
 
 ### Usage
 
 #### Download Song, Playlist, Album from Web URL
 ```sh
-$ python3 download_reloaded.py
+$ python download_reloaded.py
 $ Paste the URL: https://www.jiosaavn.com/album/tum-hi-aana-from-marjaavaan/j9bfphC2728_
 ```
 
 #### You can also specify the url in the with -u or --url argument directly
 ```sh
-$ python3 download_reloaded.py -u https://www.jiosaavn.com/album/tum-hi-aana-from-marjaavaan/j9bfphC2728_
+$ python download_reloaded.py -u https://www.jiosaavn.com/album/tum-hi-aana-from-marjaavaan/j9bfphC2728_
 ```
 
 #### If you have more than 1 url and no time to wait use the -f or --file argument to specify the absolute path to txt file with urls pasted line by line
 ```sh
-$ python3 download_reloaded.py -f /home/monu/Desktop/urls.txt
+$ python download_reloaded.py -f /home/monu/Desktop/urls.txt
 ```
 
 #### Choose output folder path with the -o or --outFolder argument (The output path must be absolute path and not relative)
 ```
-$ python3 download_reloaded.py -o /home/monu/Desktop/
+$ python download_reloaded.py -o /home/monu/Desktop/
 ```
 
 
@@ -67,26 +68,26 @@ $ Paste the URL of Artist Profile: https://www.jiosaavn.com/artist/babbal-rai-al
 
 #### Download All Playlist from your profile
 ```sh
-$ python3 download_reloaded.py -user -p
+$ python download_reloaded.py -user -p
 $ Enter your Email: your_saavn_email
 $ Enter your Password: your_saavn_password
 ```
 
 #### You can also specify the username and password in the arguments using -e or --email, -pw or --password
 ```sh
-$ python3 download_reloaded.py -user -e YOUR_EMAIL -pw YOUR_PASSWORD -p
+$ python download_reloaded.py -user -e YOUR_EMAIL -pw YOUR_PASSWORD -p
 ```
 
 #### Download All Albums from your profile
 ```sh
-$ python3 download_reloaded.py -user -a
+$ python download_reloaded.py -user -a
 $ Enter your Email: your_saavn_email
 $ Enter your Password: your_saavn_password
 ```
 
 #### Clone songs, albums and playlists to a new account(account created by script itself)
 ```sh
-$ python3 download_reloaded.py -user -clone -create
+$ python download_reloaded.py -user -clone -create
 $ Enter original account email(FROM): from_account_email
 $ Enter original account password(FROM): from_account_password
 $ Enter the email for new account(TO): new_account_email
@@ -95,7 +96,7 @@ $ Enter the password for new account(TO): new_account_password
 
 #### Clone songs, albums and playlists to another account(must alreay exist)
 ```sh
-$ python3 download_reloaded.py -user -clone -copy
+$ python download_reloaded.py -user -clone -copy
 $ Enter original account email(FROM): from_account_email
 $ Enter original account password(FROM): from_account_password
 $ Enter the email of copy account(TO): to_account_email
@@ -104,12 +105,12 @@ $ Enter the password of copy account(TO): to_account_password
 
 #### Create new account
 ```sh
-$ python3 download_reloaded.py -user -create
+$ python download_reloaded.py -user -create
 $ Enter the email: email_you_want_to_use
 $ Enter the password: password_you_want_to_use
 ```
 
-### Changelog V2
+### Changelog V 0.2.2
   - Added download support for individual songs
   - Added command argument for input file with urls (-f, --file)
   - Added command argument for changing output directory (-o, --outFolder)
