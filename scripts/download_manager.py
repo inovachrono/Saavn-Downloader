@@ -3,7 +3,7 @@ import urllib.request
 import html
 import json
 import base64
-import os
+import os, inquirer
 
 from pySmartDL import SmartDL
 
