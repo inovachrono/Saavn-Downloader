@@ -60,7 +60,23 @@ class Manager():
             return True
     
     def downloadSongs(self, songs_json, album_name='songs', artist_name='Non-Artist'):
-        for song in songs_json['songs']:
+        choices = songs_json['songs']
+
+        if len(songs_json['songs'])>1:
+            quest1 = [inquirer.Confirm('choose', message='Wanna choose songs? ', default=False)]
+            ans1 = inquirer.prompt(quest1)
+            if ans1['choose']==True:
+                del choices
+                a=[]
+                for e in songs_json['songs']:
+                    wow = e['song']+' - '+e['primary_artists']
+                    a.append(wow)
+                merged_l = tuple(zip(a,songs_json['songs']))
+                quest2 = [inquirer.Checkbox('songs', message='Select Songs (Left Arrow to Select)', choices=merged_l)]
+                songs_json = inquirer.prompt(quest2)
+                choices = songs_json['songs']
+
+        for song in choices:
             try:
                 dec_url = self.get_dec_url(song['encrypted_media_url'])
                 filename = self.format_filename(song['song'])
