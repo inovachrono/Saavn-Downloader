@@ -25,6 +25,9 @@ $ pip install -r requirements.txt
 
 ### Usage
 
+> ## ***Google colab link to execute all the script actions:*** [Colab Notebok](https://colab.research.google.com/drive/1xQ5GQLWkEnfK189jT41WzQ2d0YS4sVJx?usp=sharing)
+
+
 #### Download Song, Playlist, Album from Web URL
 ```sh
 $ python download_reloaded.py
