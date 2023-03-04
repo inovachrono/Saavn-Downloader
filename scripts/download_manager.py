@@ -99,7 +99,7 @@ class Manager():
         audio['cprt'] = html.unescape(self.unicode(json_data['label']))
         # if track['explicit']:
         #    audio['rtng'] = [(str(4))]
-        cover_url = json_data['image'][:-11] + '500x500.jpg'
+        cover_url = json_data['image'][:-12] + '500x500.jpg'
         fd = urllib.request.urlopen(cover_url)
         cover = MP4Cover(fd.read(), getattr(MP4Cover, 'FORMAT_PNG' if cover_url.endswith('png') else 'FORMAT_JPEG'))
         fd.close()
