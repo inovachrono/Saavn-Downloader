@@ -1,6 +1,3 @@
-from bs4 import BeautifulSoup
-import requests
-
 from scripts.helper import argManager, setProxy, scan_url
 from scripts.content.playlist import Playlist
 from scripts.content.album import Album
@@ -32,7 +29,7 @@ class Download():
                 email = args.email
                 password = args.password
             else:
-                email = input('Enter your email for jiosaavn: ').strip()
+                email = input("Enter your email for jiosaavn: ").strip()
                 password = input("Enter your password for jiosaavn: ").strip()
             account = Account(proxies=proxies, headers=headers, email=email, password=password)
             if args.p:
@@ -58,21 +55,23 @@ class Download():
 
             for dl_url in dl_urls:
                 dl_type = scan_url(url=dl_url)
-                if dl_type == 'playlist':      
+                if dl_type == "playlist":      
                     playlist = Playlist(proxies, headers, dl_url)
                     playlist.start_download()
-                elif dl_type == 'album':
+                elif dl_type == "album":
                     album = Album(proxies, headers, dl_url)
                     album.start_download()
-                elif dl_type == 'artist':
+                elif dl_type == "artist":
                     artist = Artist(proxies, headers, args, dl_url)
                     artist.start_download()
-                elif dl_type == 'song':
+                elif dl_type == "song":
                     song = Song(proxies, headers, dl_url)
                     song.start_download()
-        print('DONE\n')
+                else:
+                    print("Invalid URL:", dl_url)
+        print("DONE\n")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     obj = Download()
     obj.run()

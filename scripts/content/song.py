@@ -30,8 +30,8 @@ class Song():
             }
         self.args = argManager()
         self.url = url
-        self.songID = None
-        self.song_json = None
+        self.songID: str | None = None
+        self.song_json: dict | None = None
 
     def setSongID(self, song_id):
         self.songID = song_id
@@ -70,24 +70,25 @@ class Song():
 
     def downloadSong(self, album_name='songs', artist_name='Non-Artist'):
         manager = Manager()
+        if self.songID is None or self.song_json is None:
+            print("Song ID and song_json cannot be None")
+            return
         song = self.song_json[self.songID]
         try:
             dec_url = manager.get_dec_url(song["more_info"]['encrypted_media_url'])
             filename = manager.format_filename(song['title'])
-        except Exception as e:
-            print('Download Error : {0}'.format(e))
-        try:
             location = manager.get_download_location(artist_name, album_name, filename)
             has_downloaded = manager.start_download(filename, location, dec_url)
             if has_downloaded:
                 name = song.get('subtitle', '')
                 try:
                     song["song"] = song["title"]
-                    song["primary_artists"] = song["more_info"]["artistMap"]["primary_artists"][0]["name"]
+                    song["primary_artists"] = [artist["name"] for artist in song["more_info"]["artistMap"]["primary_artists"]]
                     song["album"] = song["more_info"]["album"]
-                    song["singers"] = ", ".join([artist["name"] for artist in song["more_info"]["artistMap"]["primary_artists"]])
-                    song["music"] = song["more_info"]["music"]
-                    song["starring"] = ""
+                    song["singers"] = [artist["name"] for artist in song["more_info"]["artistMap"]["artists"] if artist["role"] == "singer"]
+                    song["music"] = [artist["name"] for artist in song["more_info"]["artistMap"]["artists"] if artist["role"] == "music"] or song["more_info"]["music"]
+                    song["starring"] = [artist["name"] for artist in song["more_info"]["artistMap"]["artists"] if artist["role"] == "starring"]
+                    song["copyright_text"] = song["more_info"]["copyright_text"]
                     song["label"] = song["more_info"]["label"]
                 except Exception as e:
                     print("Error creating song tag information")

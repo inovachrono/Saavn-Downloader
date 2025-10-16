@@ -1,8 +1,6 @@
-![Python application](https://github.com/monuyadav016/Saavn-Downloader/workflows/Python%20application/badge.svg)
-
 # Saavn Downloader
 The fullset of functionality offered are:
-  - High Qualtiy - M4A (320 Kbps bitrate)
+  - High Qualtiy - MP4 (320 Kbps bitrate)
   - Songs with metadata
   - Download Individual Song
   - Download PlayList
@@ -16,7 +14,7 @@ The fullset of functionality offered are:
   - Clone an account to another account
   - Create a new account
  
-###### Python 3.8.* recommended if you are installing it fresh for the project
+###### Python 3.10.* recommended if you are installing it fresh for the project
 
 ### Installation
 ```sh
@@ -27,23 +25,23 @@ $ pip install -r requirements.txt
 
 #### Download Song, Playlist, Album from Web URL
 ```sh
-$ python download_reloaded.py
+$ python main.py
 $ Paste the URL: https://www.jiosaavn.com/album/tum-hi-aana-from-marjaavaan/j9bfphC2728_
 ```
 
 #### You can also specify the url in the with -u or --url argument directly
 ```sh
-$ python download_reloaded.py -u https://www.jiosaavn.com/album/tum-hi-aana-from-marjaavaan/j9bfphC2728_
+$ python main.py -u https://www.jiosaavn.com/album/tum-hi-aana-from-marjaavaan/j9bfphC2728_
 ```
 
 #### If you have more than 1 url and no time to wait use the -f or --file argument to specify the absolute path to txt file with urls pasted line by line
 ```sh
-$ python download_reloaded.py -f /home/monu/Desktop/urls.txt
+$ python main.py -f /home/monu/Desktop/urls.txt
 ```
 
 #### Choose output folder path with the -o or --outFolder argument (The output path must be absolute path and not relative)
 ```
-$ python download_reloaded.py -o /home/monu/Desktop/
+$ python main.py -o /home/monu/Desktop/
 ```
 
 
@@ -51,7 +49,7 @@ $ python download_reloaded.py -o /home/monu/Desktop/
 
 #### Download All Albums of an Artist
 ```sh
-$ python download_reloaded.py -album
+$ python main.py -album
 $ Paste the URL of Artist Profile: https://www.jiosaavn.com/artist/babbal-rai-albums/pRd5ZTGrLv8_
 ``` 
 *\*If none of the flag such as --album, --song is specified for the artist then by default the Artist music will be downloaded in Album folder structure i.e. there will be as many album folders as the number of albums an artist has on jiosaavn and not a single songs folder that you get when --song flag is specified.  
@@ -59,7 +57,7 @@ $ Paste the URL of Artist Profile: https://www.jiosaavn.com/artist/babbal-rai-al
 
 #### Download All Songs of an Artist
 ```sh
-$ python download_reloaded.py -song
+$ python main.py -song
 $ Paste the URL of Artist Profile: https://www.jiosaavn.com/artist/babbal-rai-albums/pRd5ZTGrLv8_
 ```
 
@@ -68,26 +66,26 @@ $ Paste the URL of Artist Profile: https://www.jiosaavn.com/artist/babbal-rai-al
 
 #### Download All Playlist from your profile
 ```sh
-$ python download_reloaded.py -user -p
+$ python main.py -user -p
 $ Enter your Email: your_saavn_email
 $ Enter your Password: your_saavn_password
 ```
 
 #### You can also specify the username and password in the arguments using -e or --email, -pw or --password
 ```sh
-$ python download_reloaded.py -user -e YOUR_EMAIL -pw YOUR_PASSWORD -p
+$ python main.py -user -e YOUR_EMAIL -pw YOUR_PASSWORD -p
 ```
 
 #### Download All Albums from your profile
 ```sh
-$ python download_reloaded.py -user -a
+$ python main.py -user -a
 $ Enter your Email: your_saavn_email
 $ Enter your Password: your_saavn_password
 ```
 
 #### Clone songs, albums and playlists to a new account(account created by script itself)
 ```sh
-$ python download_reloaded.py -user -clone -create
+$ python main.py -user -clone -create
 $ Enter original account email(FROM): from_account_email
 $ Enter original account password(FROM): from_account_password
 $ Enter the email for new account(TO): new_account_email
@@ -96,7 +94,7 @@ $ Enter the password for new account(TO): new_account_password
 
 #### Clone songs, albums and playlists to another account(must alreay exist)
 ```sh
-$ python download_reloaded.py -user -clone -copy
+$ python main.py -user -clone -copy
 $ Enter original account email(FROM): from_account_email
 $ Enter original account password(FROM): from_account_password
 $ Enter the email of copy account(TO): to_account_email
@@ -105,10 +103,15 @@ $ Enter the password of copy account(TO): to_account_password
 
 #### Create new account
 ```sh
-$ python download_reloaded.py -user -create
+$ python main.py -user -create
 $ Enter the email: email_you_want_to_use
 $ Enter the password: password_you_want_to_use
 ```
+
+### Changelog V 0.3
+ - Bug fixes for download and metadata store
+ - Removed unnessary dependencies and deprecated packages
+ - Bumped dependency versions
 
 ### Changelog V 0.2.2
   - Added download support for individual songs
