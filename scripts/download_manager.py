@@ -89,7 +89,7 @@ class Manager():
         if "music" in json_data:
             audio["\xa9wrt"] = [html.unescape(self.unicode(music)) for music in json_data["music"]]
         if "starring" in json_data:
-            audio["desc"] = html.unescape(self.unicode(f"Starring: {",".join(json_data["starring"])}"))
+            audio["desc"] = html.unescape(self.unicode(f"Starring: {','.join(json_data['starring'])}"))
         # audio["\xa9gen"] = html.unescape(self.unicode(playlist_name))
         if "copyright_text" in json_data:
             audio["cprt"] = html.unescape(self.unicode(json_data["copyright_text"]))
